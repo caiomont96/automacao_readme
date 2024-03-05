@@ -524,4 +524,12 @@ yyy
 select * from xyz
 ```
 
+## Próximos passos:
 
+* No mundo real, um time comercial geralmente não cria cotações apenas de um fornecedor, eles oscilam os fornecedores ou até mesmo criam um orçamento único com origem de mais de um fornecedor, penso no futuro deste projeto, incluir a possibilidade de transformar a planilha de mais de uma fonte de fornecedor para orçamento final, seja ele híbrido de mais de um fornecedor ou não.
+
+* Criar uma calculadora de impostos sobre os valores dos itens.
+
+* Criar uma calculadora de frete com base na cidade de coleta e entrega, com critérios de precificação baseados em peso e km.
+
+* Criar a possibilidade do usuário enviar o e-mail para o cliente pelo executável
