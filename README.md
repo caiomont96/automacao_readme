@@ -1,6 +1,11 @@
-# Teste
+### Sistema de geração de cotação automatizado.
+.
+.
 
 “ Este projeto é um reflexo de desafios que já tive em ambiente de trabalho real, entretanto, o formato do desafio e todos os dados, incluindo o nome da empresa, clientes e produtos, são fictícios. “
+
+.
+.
 
 Em uma empresa do setor de agronegócio, o time de marketing e vendas está experimentando um aumento significativo na demanda, resultando em uma enxurrada de solicitações de orçamento para produtos agrícolas.
 Contudo, esse aumento nas oportunidades também trouxe consigo um novo problema. 
@@ -258,7 +263,11 @@ doc.build(story)
 print(f'Tabela exportada para {nome_arquivo_pdf} com sucesso!')
 ```
 
-# Código separado em funções e com o Tkinter.
+Até o momento, o código está operacional, mas sua aplicação é restrita ao meu ambiente de compilação, carecendo de uma interface mais abrangente para ser utilizada como uma ferramenta por um vendedor.
+
+Abaixo, irei resumir as ações em funções e incluir e criar uma aplicação pela biblioteca Tkinter
+
+# Código separado em funções
 
 ```bash
 import pandas as pd
@@ -456,6 +465,12 @@ def gerar_pdf(df, caminho_pdf, vendedor_escolhido, cliente_escolhido):
 #gerar_pdf(df, caminho_salvar_pdf, caminho_logotipo)
 
 
+```
+
+# Tkinter 
+
+```bash
+
 # Interface Gráfica (Tkinter)
 janela = tk.Tk()
 janela.title("Processador de Planilha")
@@ -502,4 +517,11 @@ botao_processar.pack(side=tk.LEFT, padx=5)
 
 janela.mainloop()
 ```
+
+yyy
+
+```bash
+select * from xyz
+```
+
 
