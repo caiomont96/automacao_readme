@@ -282,14 +282,30 @@ nova_ordem_colunas = ['Produtos', 'Quantidade', 'Valor Unitário', 'Valor Total'
 df = df[nova_ordem_colunas]
 
 ```
-# botar como vai estar a planilha nesse ponto do codigo
+| Produtos                   | Quantidade | Valor Unitário | Valor Total | Un. Medida    |
+|----------------------------|------------|----------------|-------------|---------------|
+| Herbicidas Glyphosate      | 90         | 72.36          | 6512.4      | 90 litro(s)   |
+| Herbicidas Paraquat        | 77         | 84.24          | 6486.48     | 77 litro(s)   |
+| Herbicidas Atrazine        | 11         | 36.72          | 403.92      | 11 litro(s)   |
+| Fungicidas Mancozeb        | 21         | 50.6937        | 1064.5677   | 10500 g       |
+| Fungicidas Azoxystrobin    | 13         | 51.0489        | 663.6357    | 6500 g        |
+| Fungicidas Tebuconazole    | 5          | 106.5378       | 532.689     | 2500 g        |
+| Inseticidas Imidacloprid   | 32         | 52.6919        | 1686.1408   | 8000 ml       |
 
 ```bash
 
 df['Valor Unitário'] = df['Valor Unitário'].astype(float).round(2)
 df['Valor Total'] = df['Valor Total'].astype(float).round(2)
 ```
-# botar como vai estar a planilha nesse ponto do codigo
+| Produtos                   | Quantidade | Valor Unitário | Valor Total | Un. Medida    |
+|----------------------------|------------|----------------|-------------|---------------|
+| Herbicidas Glyphosate      | 90         | 72.36          | 6512.40     | 90 litro(s)   |
+| Herbicidas Paraquat        | 77         | 84.24          | 6486.48     | 77 litro(s)   |
+| Herbicidas Atrazine        | 11         | 36.72          | 403.92      | 11 litro(s)   |
+| Fungicidas Mancozeb        | 21         | 50.69          | 1064.57     | 10500 g       |
+| Fungicidas Azoxystrobin    | 13         | 51.05          | 663.64      | 6500 g        |
+| Fungicidas Tebuconazole    | 5          | 106.54         | 532.69      | 2500 g        |
+| Inseticidas Imidacloprid   | 32         | 52.69          | 1686.14     | 8000 ml       |
 
 ```bash
 
@@ -308,8 +324,16 @@ df.loc[condicao, 'Un. Medida'] = df.loc[condicao].apply(lambda row: f'{row["Un. 
 df.drop(['Un. Medida_Numero', 'Un. Medida_Medida'], axis=1, inplace=True)
 
 ```
-# botar como vai estar a planilha nesse ponto do codigo
 
+| Produtos                                     | Quantidade | Valor Unitário | Valor Total | Un. Medida         |
+|----------------------------------------------|------------|----------------|-------------|--------------------|
+| Herbicidas Glyphosate                        | 90         | 72.36          | 6512.40     | 90 litro(s)        |
+| Herbicidas Paraquat                          | 77         | 84.24          | 6486.48     | 77 litro(s)        |
+| Herbicidas Atrazine                          | 11         | 36.72          | 403.92      | 11 litro(s)        |
+| Fungicidas Mancozeb                          | 21         | 50.69          | 1064.57     | 10.5 kg            |
+| Fungicidas Azoxystrobin                      | 13         | 51.05          | 663.64      | 6.5 kg             |
+| Fungicidas Tebuconazole                      | 5          | 106.54         | 532.69      | 2.5 kg             |
+| Inseticidas Imidacloprid                     | 32         | 52.69          | 1686.14     | 8.0 litro(s)       |
 
 ```bash
 
@@ -329,27 +353,28 @@ df = df[original_ordem_colunas]
 # Abaixo, a tabela está pronta e dentro do formato que o cliente exige receber, com margens de lucro embutidas e suas respectivas unidades de Medida convertidas com base na Quantidade.
 
 
-| Produtos                                      | Quantidade | Valor Unitário | Valor Total | Un. Medida   |
-|-----------------------------------------------|------------|----------------|-------------|--------------|
-| Herbicidas Glyphosate                         | 90         | 81.74          | 7356.60     | 90 litro(s)  |
-| Herbicidas Paraquat                           | 77         | 95.16          | 7327.32     | 77 litro(s)  |
-| Herbicidas Atrazine                           | 11         | 41.48          | 456.28      | 11 litro(s)  |
-| Fungicidas Mancozeb                           | 21         | 52.06          | 1093.34     | 10.5 kg      |
-| Fungicidas Azoxystrobin                       | 13         | 52.43          | 681.57      | 6.5 kg       |
-| Fungicidas Tebuconazole                       | 5          | 109.42         | 547.09      | 2.5 kg       |
-| Inseticidas Imidacloprid                      | 32         | 61.09          | 1954.73     | 8.0 litro(s) |
-| Inseticidas Lambda-cyhalothrin                | 5          | 97.82          | 489.09      | 1.25 litro(s)|
-| Inseticidas Chlorpyrifos                      | 7          | 119.66         | 837.59      | 1.75 litro(s)|
-| Fertilizantes Nitrato de amônio               | 17         | 93.32          | 1586.51     | 425 kg       |
-| Fertilizantes Fosfato diamônico (DAP)        | 9          | 115.63         | 1040.69     | 225 kg       |
-| Fertilizantes Cloreto de potássio             | 45         | 127.48         | 5736.56     | 1125 kg      |
-| Reguladores de crescimento: Ácido giberélico  | 23         | 19.32          | 444.27      | 230 g        |
-| Reguladores de crescimento: Paclobutrazol     | 43         | 25.8           | 1109.19     | 430 g        |
-| Reguladores de crescimento: Ethephon          | 18         | 39.02          | 702.31      | 180 g        |
-| Adjuvantes Óleo mineral                       | 8          | 36.55          | 292.42      | 4.0 litro(s) |
-| Adjuvantes Surfactantes                       | 32         | 46.93          | 1501.63     | 16.0 litro(s)|
-| Adjuvantes Espalhantes adesivos               | 19         | 60.86          | 1156.40     | 9.5 litro(s) |
-| Total                                         |            |                | 34313.59    |              |
+|| Produtos                                    | Quantidade | Valor Unitário | Valor Total | Un. Medida         |
+|----------------------------------------------|------------|----------------|-------------|--------------------|
+| Herbicidas Glyphosate                        | 90         | 72.36          | 6512.40     | 90 litro(s)        |
+| Herbicidas Paraquat                          | 77         | 84.24          | 6486.48     | 77 litro(s)        |
+| Herbicidas Atrazine                          | 11         | 36.72          | 403.92      | 11 litro(s)        |
+| Fungicidas Mancozeb                          | 21         | 50.69          | 1064.57     | 10.5 kg            |
+| Fungicidas Azoxystrobin                      | 13         | 51.05          | 663.64      | 6.5 kg             |
+| Fungicidas Tebuconazole                      | 5          | 106.54         | 532.69      | 2.5 kg             |
+| Inseticidas Imidacloprid                     | 32         | 52.69          | 1686.14     | 8.0 litro(s)       |
+| Inseticidas Lambda-cyhalothrin               | 5          | 84.38          | 421.89      | 1.25 litro(s)      |
+| Inseticidas Chlorpyrifos                     | 7          | 103.21         | 722.50      | 1.75 litro(s)      |
+| Fertilizantes Nitrato de amônio              | 17         | 90.78          | 1543.24     | 425 kg             |
+| Fertilizantes Fosfato diamônico (DAP)        | 9          | 112.48         | 1012.31     | 225 kg             |
+| Fertilizantes Cloreto de potássio            | 45         | 124.0          | 5580.10     | 1125 kg            |
+| Reguladores de crescimento: Ácido giberélico | 23         | 18.79          | 432.15      | 230 g              |
+| Reguladores de crescimento: Paclobutrazol    | 43         | 25.09          | 1078.93     | 430 g              |
+| Reguladores de crescimento: Ethephon         | 18         | 37.95          | 683.15      | 180 g              |
+| Adjuvantes Óleo mineral                      | 8          | 35.56          | 284.45      | 4.0 litro(s)       |
+| Adjuvantes Surfactantes                      | 32         | 45.65          | 1460.68     | 16.0 litro(s)      |
+| Adjuvantes Espalhantes adesivos              | 19         | 59.2           | 1124.86     | 9.5 litro(s)       |
+| Total                                        |            |                | 31694.10    |                    |
+
 
 # Momento Criação do pdf.
 
