@@ -67,21 +67,12 @@ df = pd.read_excel('fornecedor_agro.xlsx')
 
 A planilha chega assim:
 
-| Produtos                               | Herbicidas Glyphosate | Herbicidas Paraquat | Herbicidas Atrazine | Fungicidas Mancozeb |
-| -------------------------------------- | ---------------------- | ------------------- | ------------------- | ------------------- |
-| Descrição                              | Embalagem de 1 litro(s) | Embalagem de 1 litro(s) | Embalagem de 1 litro(s) | Embalagem de 500g    |
-| Unidades                              | 90                     | 77                  | 11                  | 21                  |
-| Valor Unitário                        | 67                     | 78                  | 34                  | 45.67               |
-
-## rerergerg
-
-| Index | Produtos                               | Herbicidas Glyphosate | Herbicidas Paraquat | Herbicidas Atrazine | ... |
+|      | Produtos                               | Herbicidas Glyphosate | Herbicidas Paraquat | Herbicidas Atrazine | ... |
 |------|-------------------------------------- | ---------------------- | ------------------- | ------------------- | --- |
 | 0    | Descrição                              | Embalagem de 1 litro(s) | Embalagem de 1 litro(s) | Embalagem de 1 litro(s) | ... |
 | 1    | Unidades                              | 90                     | 77                  | 11                  | ... |
 | 2    | Valor Unitário                        | 67                     | 78                  | 34                  | ... |
 | ...  | ...                                  | ...                    | ...                 | ...                 | ... |
-
 
 
 
@@ -104,6 +95,11 @@ Ao transpor, a planilha fica dessa forma
 | Fungicidas Azoxystrobin     | Embalagem de 500g         | 13         | 45.99          |
 | Fungicidas Tebuconazole     | Embalagem de 500g         | 5          | 95.98          |
 
+os produtos viram o índice e o cabeçalho não é interpretado como cabeçalho, se tornando a primeira coluna.
+
+O código abaixo conserta:
+
+```bash
 
 df = df.reset_index()
 df.columns = df.iloc[0]
@@ -111,7 +107,7 @@ df = df[1:]
 df
 
 ```
-# formato da planilha
+# formato da planilha transposta
 
 
 | Produtos                        | Un. Medida                       | Quantidade | Valor Unitário |
@@ -150,6 +146,7 @@ Estes 10500g por sua vez serão convertidos em 10,5 kg
 Primeiramente, vamos tirar as frases "Embalagem de", "Saco de", "Frasco de" e posteriormente separar o numero e sua unidade de medida (ex: 500 e g)
 para podermos tratar essa coluna de forma numérica e não como string.
 
+(A partir daqui, por questões práticas e estéticas, não mostrarei todas as linhas da tabela mas apenas as primeiras ou mais importantes para a interpretação do que está acontecendo)
 
 ```bash
 df['Un. Medida'] = df['Un. Medida'].str.replace('Embalagem de|Saco de|Frasco de', '', regex=True)
@@ -159,22 +156,10 @@ df['Un. Medida'] = df['Un. Medida'].str.replace('Embalagem de|Saco de|Frasco de'
 |-----------------------------------------------|------------------------------------|------------|----------------|
 | Herbicidas Glyphosate                         | 1 litro(s)                         | 90         | 67             |
 | Herbicidas Paraquat                           | 1 litro(s)                         | 77         | 78             |
-| Herbicidas Atrazine                           | 1 litro(s)                         | 11         | 34             |
-| Fungicidas Mancozeb                           | 500g                               | 21         | 45.67          |
-| Fungicidas Azoxystrobin                       | 500g                               | 13         | 45.99          |
 | Fungicidas Tebuconazole                       | 500g                               | 5          | 95.98          |
 | Inseticidas Imidacloprid                      | 250ml                              | 32         | 46.63          |
-| Inseticidas Lambda-cyhalothrin                | 250ml                              | 5          | 74.67          |
-| Inseticidas Chlorpyrifos                      | 250ml                              | 7          | 91.34          |
-| Fertilizantes Nitrato de amônio               | 25 kg                              | 17         | 84.84          |
-| Fertilizantes Fosfato diamônico (DAP)        | 25 kg                              | 9          | 105.12         |
-| Fertilizantes Cloreto de potássio             | 25 kg                              | 45         | 115.89         |
-| Reguladores de crescimento: Ácido giberélico  | 10g                                | 23         | 17.56          |
-| Reguladores de crescimento: Paclobutrazol     | 10g                                | 43         | 23.45          |
-| Reguladores de crescimento: Ethephon          | 10g                                | 18         | 35.47          |
-| Adjuvantes Óleo mineral                       | 500ml                              | 8          | 33.23          |
-| Adjuvantes Surfactantes                       | 500ml                              | 32         | 42.66          |
-| Adjuvantes Espalhantes adesivos               | 500ml                              | 19         | 55.33          |
+
+O código abaixo vai separar
 
 ```bash
 
@@ -185,14 +170,44 @@ df['Medida'] = pd.to_numeric(df['Medida'], errors='coerce')
 
 ```
 
+A partir daqui, a planilha Vai ter 'Medida' e 'Un.' separados, um como número int. e outro como string.
 
-# botar como vai estar a planilha nesse ponto do codigo
+
+| Produtos                   | Quantidade | Valor Unitário | Medida | Un.     |
+|----------------------------|------------|----------------|--------|---------|
+| Herbicidas Glyphosate      | 90         | 67             | 1      | litro(s) |
+| Herbicidas Paraquat         | 77         | 78             | 1      | litro(s) |
+| Herbicidas Atrazine         | 11         | 34             | 1      | litro(s) |
+| Fungicidas Mancozeb         | 21         | 45.67          | 500    | g       |
+| Fungicidas Azoxystrobin     | 13         | 45.99          | 500    | g       |
+| Fungicidas Tebuconazole     | 5          | 95.98          | 500    | g       |
+| Inseticidas Imidacloprid    | 32         | 46.63          | 250    | ml      |
+
+Agora, vamos criar uma coluna chamada Valor Total, que contém a Quantidade multiplicada pelo Valor Unitário e uma chamada Quantidade Total eu multiplica Quantidade e Medida
 
 ```bash
 
-
 df['Valor Total'] = df['Quantidade'] * df['Valor Unitário']
 df['Quantidade Total'] = df['Quantidade'] * df['Medida']
+
+```
+
+| Produtos                   | Quantidade | Valor Unitário | Medida | Un.     | Valor Total | Quantidade Total |
+|----------------------------|------------|----------------|--------|---------|-------------|-------------------|
+| Herbicidas Glyphosate      | 90         | 67             | 1      | litro(s) | 6030        | 90                |
+| Herbicidas Paraquat         | 77         | 78             | 1      | litro(s) | 6006        | 77                |
+| Herbicidas Atrazine         | 11         | 34             | 1      | litro(s) | 374         | 11                |
+| Fungicidas Mancozeb         | 21         | 45.67          | 500    | g       | 959.07      | 10500             |
+| Fungicidas Azoxystrobin     | 13         | 45.99          | 500    | g       | 597.87      | 6500              |
+| Fungicidas Tebuconazole     | 5          | 95.98          | 500    | g       | 479.9       | 2500              |
+| Inseticidas Imidacloprid    | 32         | 46.63          | 250    | ml      | 1492.16     | 8000              |
+
+
+Agora, vamos re-criar a coluna 'Un. Medida' concatenando a coluna Quantidade Total e de Un.
+
+Vamos aproveitar e excluir as colunas Quantidade Total, Medida e Un., suas funções eram auxiliares e não farão parte o produto final.
+
+```bash
 
 df['Un. Medida'] = df['Quantidade Total'].astype(str) + ' ' + df['Un.']
 df = df.drop(['Quantidade Total', 'Medida', 'Un.'], axis=1)
@@ -206,31 +221,57 @@ df = df.drop(['Quantidade Total', 'Medida', 'Un.'], axis=1)
 
 # botar como vai estar a planilha nesse ponto do codigo
 
-# A margem de lucro de Herbicidas é de 22%
-# A margem de lucro de Fungicidas é de 14%
-# A margem de lcuro de Inseticidas é de 31%
-# Demais margens são 10%
+# A margem de lucro de Herbicidas é de 8%
+# A margem de lucro de Fungicidas é de 11%
+# A margem de lcuro de Inseticidas é de 13%
+# Demais margens são 7%
 
 def determinar_margem_lucro(produto):
     if 'Herbicidas' in produto:
-        return 0.22
+        return 0.08
     elif 'Fungicidas' in produto:
-        return 0.14
+        return 0.11
     elif 'Inseticidas' in produto:
-        return 0.31
+        return 0.13
     else:
-        return 0.10  
+        return 0.07  
 
 df['Margem Lucro'] = df['Produtos'].apply(determinar_margem_lucro)
 
 ```
 
-# botar como vai estar a planilha nesse ponto do codigo
+| Produtos                   | Quantidade | Valor Unitário | Medida  | Un.  | Valor Total | Quantidade Total | Margem Lucro |
+|----------------------------|------------|----------------|---------|------|-------------|-------------------|--------------|
+| Herbicidas Glyphosate      | 90         | 67             | 1       | litro(s) | 6030        | 90                | 0.08         |
+| Herbicidas Paraquat        | 77         | 78             | 1       | litro(s) | 6006        | 77                | 0.08         |
+| Herbicidas Atrazine        | 11         | 34             | 1       | litro(s) | 374         | 11                | 0.08         |
+| Fungicidas Mancozeb        | 21         | 45.67          | 500     | g    | 959.07      | 10500             | 0.11         |
+| Fungicidas Azoxystrobin    | 13         | 45.99          | 500     | g    | 597.87      | 6500              | 0.11         |
+| Fungicidas Tebuconazole    | 5          | 95.98          | 500     | g    | 479.9       | 2500              | 0.11         |
+| Inseticidas Imidacloprid   | 32         | 46.63          | 250     | ml   | 1492.16     | 8000              | 0.13         |
+
+Agora aplicando:
 
 ```bash
 
 df['Valor Unitário Ajustado'] = df['Valor Unitário'] * (1 + df['Margem Lucro'])
 df['Valor Total Ajustado'] = df['Quantidade'] * df['Valor Unitário Ajustado']
+```
+
+| Produtos                   | Quantidade | Valor Unitário | Medida | Un. | Valor Total | Quantidade Total | Margem Lucro | Valor Unitário Ajustado | Valor Total Ajustado |
+|----------------------------|------------|----------------|--------|-----|-------------|-------------------|--------------|-------------------------|-----------------------|
+| Herbicidas Glyphosate      | 90         | 67             | 1      | litro(s) | 6030        | 90                | 0.08         | 72.36                   | 6512.4                |
+| Herbicidas Paraquat        | 77         | 78             | 1      | litro(s) | 6006        | 77                | 0.08         | 84.24                   | 6486.48               |
+| Herbicidas Atrazine        | 11         | 34             | 1      | litro(s) | 374         | 11                | 0.08         | 36.72                   | 403.92                |
+| Fungicidas Mancozeb        | 21         | 45.67          | 500    | g   | 959.07      | 10500             | 0.11         | 50.6937                 | 1064.5677             |
+| Fungicidas Azoxystrobin    | 13         | 45.99          | 500    | g   | 597.87      | 6500              | 0.11         | 51.0489                 | 663.6357              |
+| Fungicidas Tebuconazole    | 5          | 95.98          | 500    | g   | 479.9       | 2500              | 0.11         | 106.5378                | 532.689               |
+| Inseticidas Imidacloprid   | 32         | 46.63          | 250    | ml  | 1492.16     | 8000              | 0.13         | 52.6919                 | 1686.1408             |
+
+
+Arrumando as várias colunas
+
+```bash
 
 df = df.drop(['Valor Unitário', 'Valor Total', 'Margem Lucro'], axis=1)
 
@@ -239,13 +280,18 @@ df = df.rename(columns={'Valor Unitário Ajustado': 'Valor Unitário', 'Valor To
 nova_ordem_colunas = ['Produtos', 'Quantidade', 'Valor Unitário', 'Valor Total','Un. Medida']
 
 df = df[nova_ordem_colunas]
+
 ```
 # botar como vai estar a planilha nesse ponto do codigo
+
 ```bash
 
 df['Valor Unitário'] = df['Valor Unitário'].astype(float).round(2)
 df['Valor Total'] = df['Valor Total'].astype(float).round(2)
+```
+# botar como vai estar a planilha nesse ponto do codigo
 
+```bash
 
 df[['Un. Medida_Numero', 'Un. Medida_Medida']] = df['Un. Medida'].str.extract(r'(\d+\.?\d*)\s?(\D+)')
 
