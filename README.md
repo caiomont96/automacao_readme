@@ -2,7 +2,7 @@
 .
 .
 
-“ Este projeto é um reflexo de desafios que já tive em ambiente de trabalho real, entretanto, o formato do desafio e todos os dados, incluindo o nome da empresa, clientes e produtos, são fictícios. “
+“ Este projeto é um reflexo de desafios que já tive em ambiente de trabalho real, entretanto, o formato do desafio e todos os dados, incluindo o nome da empresa, clientes, margem de lucro e produtos, são fictícios. “
 
 .
 .
