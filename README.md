@@ -353,7 +353,7 @@ df = df[original_ordem_colunas]
 # Abaixo, a tabela está pronta e dentro do formato que o cliente exige receber, com margens de lucro embutidas e suas respectivas unidades de Medida convertidas com base na Quantidade.
 
 
-|| Produtos                                    | Quantidade | Valor Unitário | Valor Total | Un. Medida         |
+|  Produtos                                    | Quantidade | Valor Unitário | Valor Total | Un. Medida         |
 |----------------------------------------------|------------|----------------|-------------|--------------------|
 | Herbicidas Glyphosate                        | 90         | 72.36          | 6512.40     | 90 litro(s)        |
 | Herbicidas Paraquat                          | 77         | 84.24          | 6486.48     | 77 litro(s)        |
