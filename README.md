@@ -16,7 +16,11 @@ No entanto, com a crescente demanda, os vendedores agora enfrentam o desafio de 
 
 Diante desse cenário, a equipe de dados recebeu o desafio de desenvolver uma solução de automação para esse processo. 
 
-O objetivo é transformar a planilha do fornecedor em um documento final em PDF, incorporando dados do cliente, conversões de unidade de medida e margens de lucro, de maneira rápida e eficiente, permitindo que os vendedores foquem no que fazem de melhor: negociar e atender aos clientes, como no exemplo abaixo:
+O objetivo é transformar a planilha do fornecedor em um documento final em PDF, incorporando dados do cliente, conversões de unidade de medida e margens de lucro, de maneira rápida e eficiente, permitindo que os vendedores foquem no que fazem de melhor: negociar e atender aos clientes.
+
+O vídeo abaixo mostra como a solução é feita antes da solução:
+
+## VIDEO
 
 # Dividindo por passos:
 
