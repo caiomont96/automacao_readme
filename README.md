@@ -16,7 +16,7 @@ No entanto, com a crescente demanda, os vendedores agora enfrentam o desafio de 
 
 Diante desse cenário, a equipe de dados recebeu o desafio de desenvolver uma solução de automação para esse processo. 
 
-O objetivo é transformar a planilha do fornecedor em um documento final em PDF, incorporando dados do cliente e margens de lucro, de maneira rápida e eficiente, permitindo que os vendedores foquem no que fazem de melhor: negociar e atender aos clientes, como no exemplo abaixo:
+O objetivo é transformar a planilha do fornecedor em um documento final em PDF, incorporando dados do cliente, conversões de unidade de medida e margens de lucro, de maneira rápida e eficiente, permitindo que os vendedores foquem no que fazem de melhor: negociar e atender aos clientes, como no exemplo abaixo:
 
 # Dividindo por passos:
 
@@ -36,6 +36,14 @@ O objetivo é transformar a planilha do fornecedor em um documento final em PDF,
 
 # Primeiro passo
 
+O primeiro passo é inserir as bibliotecas:
+
+* Pandas para manipulação da planilha xlsx
+  
+* Reportlab para conversão em pdf
+
+* Tkinter para criar uma interface gráfica para o usuário inserir a planilha e exportar em pdf em uma janela
+
 ```bash
 !pip install reportlab
 !pip install openpyxl
@@ -52,6 +60,11 @@ df = pd.read_excel('fornecedor_agro.xlsx')
 
 ```
 # formato inicial da planilha
+
+# botar aqui a imagem de como ela chega
+
+precisaremos transpor.
+
 ```bash
 
 df = df.T
@@ -85,6 +98,20 @@ df
 | Adjuvantes Surfactantes          | Frasco de 500ml                  | 32         | 42.66          |
 | Adjuvantes Espalhantes adesivos   | Frasco de 500ml                  | 19         | 55.33          |
 
+Agora temos mais clareza sobre como está a planilha ao verticalizá-la. 
+
+Un. Medida terá uma alteração forte, vou usar essa linha como exemplo:
+
+| Produtos                        | Un. Medida                       | Quantidade | Valor Unitário |
+|---------------------------------|----------------------------------|------------|----------------|
+| Fungicidas Mancozeb             | Embalagem de 500g                | 21         | 45.67          |
+
+São 21 unidades com 500g cada embalagem, a coluna Un. Medida irá sumir e deverá ser totalizado os 10500g na nova coluna de Un. Medida.
+
+Estes 10500g por sua vez serão convertidos em 10,5 kg
+
+Primeiramente, vamos tirar as frases "Embalagem de", "Saco de", "Frasco de" e posteriormente separar o numero e sua unidade de medida (ex: 500 e g)
+para podermos tratar essa coluna de forma numérica e não como string.
 
 
 ```bash
@@ -119,12 +146,28 @@ df = df.drop('Un. Medida', axis=1)
 
 df['Medida'] = pd.to_numeric(df['Medida'], errors='coerce')
 
+```
+
+
+# botar como vai estar a planilha nesse ponto do codigo
+
+```bash
+
+
 df['Valor Total'] = df['Quantidade'] * df['Valor Unitário']
 df['Quantidade Total'] = df['Quantidade'] * df['Medida']
 
 df['Un. Medida'] = df['Quantidade Total'].astype(str) + ' ' + df['Un.']
 df = df.drop(['Quantidade Total', 'Medida', 'Un.'], axis=1)
 
+```
+
+# botar como vai estar a planilha nesse ponto do codigo
+
+
+```bash
+
+# botar como vai estar a planilha nesse ponto do codigo
 
 # A margem de lucro de Herbicidas é de 22%
 # A margem de lucro de Fungicidas é de 14%
@@ -143,6 +186,12 @@ def determinar_margem_lucro(produto):
 
 df['Margem Lucro'] = df['Produtos'].apply(determinar_margem_lucro)
 
+```
+
+# botar como vai estar a planilha nesse ponto do codigo
+
+```bash
+
 df['Valor Unitário Ajustado'] = df['Valor Unitário'] * (1 + df['Margem Lucro'])
 df['Valor Total Ajustado'] = df['Quantidade'] * df['Valor Unitário Ajustado']
 
@@ -153,6 +202,9 @@ df = df.rename(columns={'Valor Unitário Ajustado': 'Valor Unitário', 'Valor To
 nova_ordem_colunas = ['Produtos', 'Quantidade', 'Valor Unitário', 'Valor Total','Un. Medida']
 
 df = df[nova_ordem_colunas]
+```
+# botar como vai estar a planilha nesse ponto do codigo
+```bash
 
 df['Valor Unitário'] = df['Valor Unitário'].astype(float).round(2)
 df['Valor Total'] = df['Valor Total'].astype(float).round(2)
@@ -172,6 +224,11 @@ df.loc[condicao, 'Un. Medida'] = df.loc[condicao].apply(lambda row: f'{row["Un. 
 # Dropando colunas auxiliares
 df.drop(['Un. Medida_Numero', 'Un. Medida_Medida'], axis=1, inplace=True)
 
+```
+# botar como vai estar a planilha nesse ponto do codigo
+
+
+```bash
 
 # Exibindo o DataFrame atualizado
 original_ordem_colunas = df.columns.tolist()
@@ -184,11 +241,11 @@ total_linha.loc[:, df.columns.difference(['Produtos', 'Valor Total'])] = ''
 df = pd.concat([df, total_linha])
 
 df = df[original_ordem_colunas]
-
-
 ```
 
-# df pronto! 
+# Abaixo, a tabela está pronta e dentro do formato que o cliente exige receber, com margens de lucro embutidas e suas respectivas unidades de Medida convertidas com base na Quantidade.
+
+
 | Produtos                                      | Quantidade | Valor Unitário | Valor Total | Un. Medida   |
 |-----------------------------------------------|------------|----------------|-------------|--------------|
 | Herbicidas Glyphosate                         | 90         | 81.74          | 7356.60     | 90 litro(s)  |
@@ -263,7 +320,7 @@ doc.build(story)
 print(f'Tabela exportada para {nome_arquivo_pdf} com sucesso!')
 ```
 
-Até o momento, o código está operacional, mas sua aplicação é restrita ao meu ambiente de compilação, carecendo de uma interface mais abrangente para ser utilizada como uma ferramenta por um vendedor.
+Até o momento, o código está funcional, mas sua aplicação é restrita ao meu ambiente de compilação, carecendo de uma interface mais abrangente para ser utilizada como uma ferramenta por um vendedor.
 
 Abaixo, irei resumir as ações em funções e incluir e criar uma aplicação pela biblioteca Tkinter
 
@@ -517,12 +574,9 @@ botao_processar.pack(side=tk.LEFT, padx=5)
 
 janela.mainloop()
 ```
+# Vídeo conclusão
 
-yyy
-
-```bash
-select * from xyz
-```
+# VIDEO
 
 ## Próximos passos:
 
@@ -532,4 +586,4 @@ select * from xyz
 
 * Criar uma calculadora de frete com base na cidade de coleta e entrega, com critérios de precificação baseados em peso e km.
 
-* Criar a possibilidade do usuário enviar o e-mail para o cliente pelo executável
+* Criar a possibilidade do usuário enviar o e-mail para o cliente diretamente pelo executável
