@@ -52,6 +52,7 @@ O primeiro passo é inserir as bibliotecas:
 * Tkinter para criar uma interface gráfica para o usuário inserir a planilha e exportar em pdf em uma janela
 
 ```bash
+
 !pip install reportlab
 !pip install openpyxl
 import pandas as pd
@@ -62,6 +63,11 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Image
 from reportlab.platypus import Spacer
+```
+
+Inserção da planilha
+
+```bash
 
 df = pd.read_excel('fornecedor_agro.xlsx')
 
@@ -82,6 +88,8 @@ A planilha chega assim:
 precisaremos transpor.
 
 ```bash
+# A linha de código "df = df.T" transpõe (inverte linhas e colunas) o DataFrame df.
+# Isso significa que as linhas do DataFrame original agora se tornam colunas e vice-versa.
 
 df = df.T
 ```
@@ -104,10 +112,20 @@ O código abaixo conserta:
 
 ```bash
 
+# A primeira linha, "df = df.reset_index()", redefine os índices do DataFrame df.
+# Isso cria uma nova coluna chamada 'index' e reinicia os índices numerados de forma sequencial.
+
+# A segunda linha, "df.columns = df.iloc[0]", redefine os nomes das colunas para serem iguais aos valores da primeira linha do DataFrame.
+# Isso substitui os nomes das colunas pelos valores presentes na primeira linha.
+
+# A terceira linha, "df = df[1:]", reatribui ao DataFrame df todos os dados, excluindo a primeira linha, que agora contém os nomes das colunas.
+# Essencialmente, isso remove a primeira linha do DataFrame.
+
 df = df.reset_index()
 df.columns = df.iloc[0]
 df = df[1:]
 df
+
 
 ```
 # formato da planilha transposta
@@ -152,6 +170,16 @@ para podermos tratar essa coluna de forma numérica e não como string.
 (A partir daqui, por questões práticas e estéticas, não mostrarei todas as linhas da tabela mas apenas as primeiras ou mais importantes para a interpretação do que está acontecendo)
 
 ```bash
+
+# A linha de código "df['Un. Medida'] = df['Un. Medida'].str.replace('Embalagem de|Saco de|Frasco de', '', regex=True)"
+# realiza a substituição de padrões na coluna 'Un. Medida' do DataFrame df.
+
+# O método str.replace() é utilizado para substituir as ocorrências dos padrões especificados pelos valores vazios ('').
+# Os padrões são 'Embalagem de', 'Saco de', e 'Frasco de', e eles são substituídos por uma string vazia.
+
+# Essencialmente, isso remove esses padrões específicos da coluna 'Un. Medida'.
+
+
 df['Un. Medida'] = df['Un. Medida'].str.replace('Embalagem de|Saco de|Frasco de', '', regex=True)
 ```
 
@@ -166,9 +194,19 @@ O código abaixo vai separar
 
 ```bash
 
+# A linha de código "df[['Medida', 'Un.']] = df['Un. Medida'].str.extract('(\d+\.?\d*)\s*([a-zA-Z\(s\)]*)')"
+# extrai informações de medidas numéricas e unidades da coluna 'Un. Medida' e as atribui a novas colunas 'Medida' e 'Un.'.
+
+# O método str.extract() é utilizado com uma expressão regular para identificar padrões numéricos e alfabéticos na coluna 'Un. Medida'.
+# A expressão regular (\d+\.?\d*)\s*([a-zA-Z\(s\)]*) captura um ou mais dígitos (com ou sem ponto decimal) como 'Medida' e letras (com parênteses) como 'Un.'.
+
+# A linha "df = df.drop('Un. Medida', axis=1)" remove a coluna original 'Un. Medida' do DataFrame df.
+
+# A última linha, "df['Medida'] = pd.to_numeric(df['Medida'], errors='coerce')", converte a coluna 'Medida' para valores numéricos.
+# Qualquer valor que não possa ser convertido é definido como NaN (Not a Number) devido ao parâmetro errors='coerce'.
+
 df[['Medida', 'Un.']] = df['Un. Medida'].str.extract('(\d+\.?\d*)\s*([a-zA-Z\(s\)]*)')
 df = df.drop('Un. Medida', axis=1)
-
 df['Medida'] = pd.to_numeric(df['Medida'], errors='coerce')
 
 ```
@@ -212,6 +250,14 @@ Vamos aproveitar e excluir as colunas Quantidade Total, Medida e Un., suas funç
 
 ```bash
 
+# A linha de código "df['Un. Medida'] = df['Quantidade Total'].astype(str) + ' ' + df['Un.']"
+# cria uma nova coluna 'Un. Medida' concatenando a coluna 'Quantidade Total' convertida para string com a coluna 'Un.'.
+
+# A linha "df = df.drop(['Quantidade Total', 'Medida', 'Un.'], axis=1)"
+# remove as colunas 'Quantidade Total', 'Medida', e 'Un.' do DataFrame df.
+# Essas colunas foram usadas temporariamente para cálculos intermediários e agora não são mais necessárias.
+
+
 df['Un. Medida'] = df['Quantidade Total'].astype(str) + ' ' + df['Un.']
 df = df.drop(['Quantidade Total', 'Medida', 'Un.'], axis=1)
 
@@ -230,7 +276,12 @@ df = df.drop(['Quantidade Total', 'Medida', 'Un.'], axis=1)
 
 ```bash
 
-# botar como vai estar a planilha nesse ponto do codigo
+# A função determinar_margem_lucro(produto) recebe o nome do produto como entrada e retorna a margem de lucro correspondente.
+# A lógica é definida por categorias de produtos: Herbicidas têm margem de 8%, Fungicidas têm margem de 11%, Inseticidas têm margem de 13%, e os demais têm margem de 7%.
+
+# A linha de código "df['Margem Lucro'] = df['Produtos'].apply(determinar_margem_lucro)"
+# aplica a função determinar_margem_lucro a cada valor na coluna 'Produtos' do DataFrame df e cria uma nova coluna 'Margem Lucro' com os resultados.
+
 
 # A margem de lucro de Herbicidas é de 8%
 # A margem de lucro de Fungicidas é de 11%
@@ -264,6 +315,13 @@ df['Margem Lucro'] = df['Produtos'].apply(determinar_margem_lucro)
 Agora aplicando:
 
 ```bash
+# A linha de código "df['Valor Unitário Ajustado'] = df['Valor Unitário'] * (1 + df['Margem Lucro'])"
+# calcula o valor unitário ajustado para cada linha multiplicando o valor unitário original pelo fator (1 + Margem de Lucro).
+
+# A linha "df['Valor Total Ajustado'] = df['Quantidade'] * df['Valor Unitário Ajustado']"
+# calcula o valor total ajustado para cada linha multiplicando a quantidade pela coluna 'Valor Unitário Ajustado'.
+# Essas operações refletem o ajuste dos preços com base nas margens de lucro específicas de cada categoria de produto.
+
 
 df['Valor Unitário Ajustado'] = df['Valor Unitário'] * (1 + df['Margem Lucro'])
 df['Valor Total Ajustado'] = df['Quantidade'] * df['Valor Unitário Ajustado']
@@ -283,6 +341,15 @@ df['Valor Total Ajustado'] = df['Quantidade'] * df['Valor Unitário Ajustado']
 Arrumando as várias colunas
 
 ```bash
+
+# A linha "df = df.drop(['Valor Unitário', 'Valor Total', 'Margem Lucro'], axis=1)"
+# remove as colunas 'Valor Unitário', 'Valor Total', e 'Margem Lucro' do DataFrame df.
+
+# A linha "df = df.rename(columns={'Valor Unitário Ajustado': 'Valor Unitário', 'Valor Total Ajustado': 'Valor Total'})"
+# renomeia as colunas 'Valor Unitário Ajustado' para 'Valor Unitário' e 'Valor Total Ajustado' para 'Valor Total'.
+
+# A última linha "df = df[nova_ordem_colunas]" reorganiza as colunas do DataFrame df na ordem especificada por nova_ordem_colunas.
+# Isso garante que as colunas estejam na ordem desejada.
 
 df = df.drop(['Valor Unitário', 'Valor Total', 'Margem Lucro'], axis=1)
 
@@ -305,6 +372,11 @@ df = df[nova_ordem_colunas]
 
 ```bash
 
+# As linhas "df['Valor Unitário'] = df['Valor Unitário'].astype(float).round(2)" e "df['Valor Total'] = df['Valor Total'].astype(float).round(2)"
+# convertem as colunas 'Valor Unitário' e 'Valor Total' para o tipo de dado float e arredondam os valores para duas casas decimais.
+# Isso garante que essas colunas tenham valores numéricos formatados corretamente.
+
+
 df['Valor Unitário'] = df['Valor Unitário'].astype(float).round(2)
 df['Valor Total'] = df['Valor Total'].astype(float).round(2)
 ```
@@ -320,18 +392,23 @@ df['Valor Total'] = df['Valor Total'].astype(float).round(2)
 
 ```bash
 
+# extrai informações numéricas e alfabéticas da coluna 'Un. Medida' e atribui a esses valores as novas colunas 'Un. Medida_Numero' e 'Un. Medida_Medida'.
+
 df[['Un. Medida_Numero', 'Un. Medida_Medida']] = df['Un. Medida'].str.extract(r'(\d+\.?\d*)\s?(\D+)')
 
-# Converta 'Un. Medida_Numero' para float
+#converte a coluna 'Un. Medida_Numero' para o tipo de dado float.
 df['Un. Medida_Numero'] = df['Un. Medida_Numero'].astype(float)
 
-# Aplicando as condições
+# cria uma condição para identificar linhas que atendem a determinados critérios (número maior que 999 e medida em gramas ou mililitros).
+
 condicao = (df['Un. Medida_Numero'] > 999) & ((df['Un. Medida_Medida'] == 'g') | (df['Un. Medida_Medida'] == 'ml'))
 
-# Aplicando as conversões corrigidas
+# aplica uma função lambda às linhas que atendem à condição. Essa função converte as medidas de gramas para quilogramas ou mililitros para litros, conforme apropriado.
+
 df.loc[condicao, 'Un. Medida'] = df.loc[condicao].apply(lambda row: f'{row["Un. Medida_Numero"]/1000} kg' if row["Un. Medida_Medida"] == 'g' else f'{row["Un. Medida_Numero"]/1000} litro(s)', axis=1)
 
-# Dropando colunas auxiliares
+# remove as colunas auxiliares 'Un. Medida_Numero' e 'Un. Medida_Medida'.
+
 df.drop(['Un. Medida_Numero', 'Un. Medida_Medida'], axis=1, inplace=True)
 
 ```
@@ -349,15 +426,21 @@ df.drop(['Un. Medida_Numero', 'Un. Medida_Medida'], axis=1, inplace=True)
 ```bash
 
 # Exibindo o DataFrame atualizado
+# Salva a ordem original das colunas do DataFrame.
 original_ordem_colunas = df.columns.tolist()
+
+# cria um novo DataFrame contendo uma linha total com a soma dos valores da coluna 'Valor Total'.
 
 total_linha = pd.DataFrame({'Produtos': 'Total', 'Un.': '', 'Valor Unitário': '', 'Unidades': '',
                           'Valor Total': df['Valor Total'].sum()}, index=[len(df)])
 
+# preenche todas as colunas, exceto 'Produtos' e 'Valor Total', da linha total com valores vazios.
 total_linha.loc[:, df.columns.difference(['Produtos', 'Valor Total'])] = ''
 
+# concatena o DataFrame original com a linha total.
 df = pd.concat([df, total_linha])
 
+# reorganiza as colunas do DataFrame df para a ordem original salva anteriormente.
 df = df[original_ordem_colunas]
 ```
   ---
