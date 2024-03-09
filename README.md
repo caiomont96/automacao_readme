@@ -67,11 +67,11 @@ df = pd.read_excel('fornecedor_agro.xlsx')
 
 A planilha chega assim:
 
-| Index | Produtos                               | Herbicidas Glyphosate | Herbicidas Paraquat | Herbicidas Atrazine | ... |
-|------|-------------------------------------- | ---------------------- | ------------------- | ------------------- | ... |
-| 0    | Descrição                              | Embalagem de 1 litro(s) | Embalagem de 1 litro(s) | Embalagem de 1 litro(s) | ... |
-| 1    | Unidades                              | 90                     | 77                  | 11                  | ... |
-| 2    | Valor Unitário                        | 67                     | 78                  | 34                  | ... |
+| Index | Produtos          | Herbicidas Glyphosate  | Herbicidas Paraquat | Herbicidas Atrazine          | ... |
+|-------|------------------ | ---------------------- | ------------------- | -----------------------------| ... |
+| 0     | Descrição         | Embalagem de 1 litro(s)| Embalagem de 1 litro(s) | Embalagem de 1 litro(s)  | ... |
+| 1     | Unidades          | 90                     | 77                  | 11                           | ... |
+| 2     | Valor Unitário    | 67                     | 78                  | 34                           | ... |
 
 
 
