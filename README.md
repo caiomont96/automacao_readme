@@ -580,9 +580,9 @@ janela.mainloop()
 
 ## Próximos passos:
 
-* Em um cenário real, uma equipe comercial frequentemente não se restringe a criar cotações de apenas um fornecedor; eles alternam entre fornecedores ou, em alguns casos, consolidam um orçamento único proveniente de diversas fontes. Considerando a evolução deste projeto, planejo a inclusão da capacidade de transformar a planilha a partir de múltiplas fontes de fornecimento para gerar um orçamento final, seja ele uma combinação de vários fornecedores ou não.
+* Em um cenário real, uma equipe comercial frequentemente não se restringe a criar cotações de apenas um fornecedor; eles alternam entre fornecedores ou, em alguns casos, consolidam um orçamento único proveniente de diversas fontes de fornecedor. Considerando a evolução deste projeto, planejo a inclusão da capacidade de transformar a planilha a partir de múltiplas fontes de fornecimento para gerar um orçamento final, seja ele uma combinação de vários fornecedores ou não.
   
-* Criar uma calculadora de impostos sobre os valores dos itens.
+* Criar uma calculadora de impostos (ex: pis/cofins) sobre os valores dos itens.
 
 * Criar uma calculadora de frete com base na cidade de coleta e entrega, com critérios de precificação baseados em peso e km.
 
