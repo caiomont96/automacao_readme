@@ -38,6 +38,9 @@ O vídeo abaixo mostra como a solução é feita antes da solução:
 
 * Após processar a tabela e criar o pdf, criar um executável pela biblioteca Tkinter para ser usado pelo vendedores.
 
+  ---
+
+
 # Primeiro passo
 
 O primeiro passo é inserir as bibliotecas:
@@ -214,7 +217,15 @@ df = df.drop(['Quantidade Total', 'Medida', 'Un.'], axis=1)
 
 ```
 
-# botar como vai estar a planilha nesse ponto do codigo
+| Produtos                   | Quantidade | Valor Unitário | Valor Total | Un. Medida    |
+|----------------------------|------------|----------------|-------------|---------------|
+| Herbicidas Glyphosate      | 90         | 67             | 6030        | 90 litro(s)   |
+| Herbicidas Paraquat        | 77         | 78             | 6006        | 77 litro(s)   |
+| Herbicidas Atrazine        | 11         | 34             | 374         | 11 litro(s)   |
+| Fungicidas Mancozeb        | 21         | 45.67          | 959.07      | 10500 g       |
+| Fungicidas Azoxystrobin    | 13         | 45.99          | 597.87      | 6500 g        |
+| Fungicidas Tebuconazole    | 5          | 95.98          | 479.9       | 2500 g        |
+| Inseticidas Imidacloprid   | 32         | 46.63          | 1492.16     | 8000 ml       |
 
 
 ```bash
@@ -349,8 +360,9 @@ df = pd.concat([df, total_linha])
 
 df = df[original_ordem_colunas]
 ```
+  ---
 
-# Abaixo, a tabela está pronta e dentro do formato que o cliente exige receber, com margens de lucro embutidas e suas respectivas unidades de Medida convertidas com base na Quantidade.
+Abaixo, a tabela está pronta e dentro do formato que o cliente exige receber, com margens de lucro embutidas e suas respectivas unidades de Medida convertidas com base na Quantidade.
 
 
 |  Produtos                                    | Quantidade | Valor Unitário | Valor Total | Un. Medida         |
@@ -375,6 +387,7 @@ df = df[original_ordem_colunas]
 | Adjuvantes Espalhantes adesivos              | 19         | 59.2           | 1124.86     | 9.5 litro(s)       |
 | Total                                        |            |                | 31694.10    |                    |
 
+  ---
 
 # Momento Criação do pdf.
 
@@ -431,6 +444,8 @@ print(f'Tabela exportada para {nome_arquivo_pdf} com sucesso!')
 Até o momento, o código está funcional, mas sua aplicação é restrita ao meu ambiente de compilação, carecendo de uma interface mais abrangente para ser utilizada como uma ferramenta por um vendedor.
 
 Abaixo, irei resumir as ações em funções e incluir e criar uma aplicação pela biblioteca Tkinter
+
+  ---
 
 # Código separado em funções
 
@@ -631,6 +646,7 @@ def gerar_pdf(df, caminho_pdf, vendedor_escolhido, cliente_escolhido):
 
 
 ```
+  ---
 
 # Tkinter 
 
@@ -682,6 +698,9 @@ botao_processar.pack(side=tk.LEFT, padx=5)
 
 janela.mainloop()
 ```
+
+  ---
+
 # Vídeo conclusão
 
 # VIDEO
