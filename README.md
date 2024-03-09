@@ -67,11 +67,12 @@ df = pd.read_excel('fornecedor_agro.xlsx')
 
 A planilha chega assim:
 
-| Produtos                               | Herbicidas Glyphosate | Herbicidas Paraquat | Herbicidas Atrazine | Fungicidas Mancozeb | ...|
+| Produtos                               | Herbicidas Glyphosate | Herbicidas Paraquat | Herbicidas Atrazine | Fungicidas Mancozeb |
 | -------------------------------------- | ---------------------- | ------------------- | ------------------- | ------------------- |
-| Descrição                              | Embalagem de 1 litro(s) | Embalagem de 1 litro(s) | Embalagem de 1 litro(s) | Embalagem de 500g    | ...|
-| Unidades                              | 90                     | 77                  | 11                  | 21                  | ...|
-| Valor Unitário                        | 67                     | 78                  | 34                  | 45.67               | ...|
+| Descrição                              | Embalagem de 1 litro(s) | Embalagem de 1 litro(s) | Embalagem de 1 litro(s) | Embalagem de 500g    |
+| Unidades                              | 90                     | 77                  | 11                  | 21                  |
+| Valor Unitário                        | 67                     | 78                  | 34                  | 45.67               |
+
 
 
 
