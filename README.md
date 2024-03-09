@@ -90,6 +90,21 @@ precisaremos transpor.
 ```bash
 
 df = df.T
+```
+
+Ao transpor, a planilha fica dessa forma
+
+|                            | 0                         | 1          | 2              |
+|----------------------------|---------------------------|------------|----------------|
+| Produtos                   | Descrição                 | Unidades   | Valor Unitário |
+| Herbicidas Glyphosate      | Embalagem de 1 litro(s)   | 90         | 67             |
+| Herbicidas Paraquat         | Embalagem de 1 litro(s)   | 77         | 78             |
+| Herbicidas Atrazine         | Embalagem de 1 litro(s)   | 11         | 34             |
+| Fungicidas Mancozeb         | Embalagem de 500g         | 21         | 45.67          |
+| Fungicidas Azoxystrobin     | Embalagem de 500g         | 13         | 45.99          |
+| Fungicidas Tebuconazole     | Embalagem de 500g         | 5          | 95.98          |
+
+
 df = df.reset_index()
 df.columns = df.iloc[0]
 df = df[1:]
