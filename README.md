@@ -28,15 +28,15 @@ O vídeo abaixo mostra como o oçamento era feito manualmente antes da solução
   
 * A coluna [Un. Medida] precisa ser alterada com a sua medida multiplicada por sua quantidade. O resultado disso por sua vez precisa ser convertido (ex: 2000g = 2kg)
 
-* Das colunas originais, apenas as de Produtos e Quantidade devem ser mantidas na versão final.
+* Precisará ser inclusa a coluna [Valor Total] multiplicando a coluna [Quantidade] e [Valor Unitário]
 
-* Será necessário criar as colunas ‘Valor Unitário’ e ‘Valor Total’, ambas com a margem de lucro inserida.
+* Será necessário incluir a margem de lucro nas colunas [Valor Unitário] e consequentemente [Valor Total]
 
 * Precisará ser criada na última linha o ‘Total’ do valor final que o cliente irá pagar.
 
 * O PDF final precisa ter a logo da empresa no canto superior esquerdo e os dados da empresa e do cliente em cima da tabela.
 
-* Após processar a tabela e criar o pdf, criar um executável pela biblioteca Tkinter para ser usado pelo vendedores.
+* Após processar a tabela e criar o pdf, criar um executável (uma janela de interação) para ser usado pelo vendedores.
 
   ---
 
