@@ -22,15 +22,15 @@ O vídeo abaixo mostra como o oçamento era feito manualmente antes da solução
 
 ## VIDEO
 
-# Dividindo por passos:
+# Dividindo a solução em passos:
 
 * O fornecedor costuma enviar a planilha em um formato horizontal, onde as características estão na horizontal e os produtos na vertical, essa planilha deve ser transposta.
+  
+* A coluna [Un. Medida] precisa ser alterada com a sua medida multiplicada por sua quantidade. O resultado disso por sua vez precisa ser convertido (ex: 2000g = 2kg)
 
 * Das colunas originais, apenas as de Produtos e Quantidade devem ser mantidas na versão final.
 
 * Será necessário criar as colunas ‘Valor Unitário’ e ‘Valor Total’, ambas com a margem de lucro inserida.
-
-* A coluna Unidade de Medida precisa ser alterada com a sua medida multiplicada por sua quantidade.
 
 * Precisará ser criada na última linha o ‘Total’ do valor final que o cliente irá pagar.
 
@@ -98,8 +98,8 @@ Ao transpor, a planilha fica dessa forma
 
 |                            | 0                         | 1          | 2              |
 |----------------------------|---------------------------|------------|----------------|
-| Produtos                   | Descrição                 | Unidades   | Valor Unitário |
-| Herbicidas Glyphosate      | Embalagem de 1 litro(s)   | 90         | 67             |
+| Produtos                   | Un. Medida                | Quantidade  | Valor Unitário |
+| Herbicidas Glyphosate      | Embalagem de 1 litro(s)   | 90          | 67             |
 | Herbicidas Paraquat         | Embalagem de 1 litro(s)   | 77         | 78             |
 | Herbicidas Atrazine         | Embalagem de 1 litro(s)   | 11         | 34             |
 | Fungicidas Mancozeb         | Embalagem de 500g         | 21         | 45.67          |
