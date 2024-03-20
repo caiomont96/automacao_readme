@@ -22,6 +22,8 @@ O vídeo abaixo mostra como o oçamento era feito manualmente antes da solução
 
 ## VIDEO
 
+[![Assista ao vídeo](https://img.youtube.com/vi/rLJLyROZpHE/0.jpg)](https://www.youtube.com/embed/rLJLyROZpHE)
+
 # Dividindo a solução em passos:
 
 * O fornecedor costuma enviar a planilha em um formato horizontal, onde as características estão na horizontal e os produtos na vertical, essa planilha deve ser transposta.
