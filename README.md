@@ -450,39 +450,61 @@ Abaixo, a tabela está pronta e dentro do formato que o cliente exige receber, c
 
 # Momento Criação do pdf.
 
+Agora é o momento de transformar o Data Frame em um orçamento formal, de forma que a logo fique no canto superior esquerdo e dados de vendedor e cliente em cima da tabela, usaremos a biblioteca ReportLab. 
+Esta biblioteca será responsável pela geração e personalização de documentos PDF. 
 
 ```bash
+# Definindo o nome do cliente como 'Priscila Motta'
 nome_cliente = 'Priscila Motta'
+
+# Definindo o CNPJ do cliente como '11111111/0001-11'
 cnpj_cliente = '11111111/0001-11'
+
+# Definindo o endereço do cliente como 'Presidente Prudente'
 endereco_cliente = 'Presidente Prudente'
 
+# Definindo o nome do vendedor como 'Pedro Martinez'
 nome_vendedor = 'Pedro Martinez'
+
+# Definindo o CNPJ da empresa como '11121112/0001-29'
 cnpj_empresa = '11121112/0001-29'
+
+# Definindo o endereço da empresa como 'Sorocaba'
 endereco_empresa = 'Sorocaba'
 
+# Definindo o caminho do logotipo como 'agro_logo.png'
 caminho_logotipo = 'agro_logo.png'
 
+# Definindo o nome do arquivo PDF como 'tabela_orcamento.pdf'
 nome_arquivo_pdf = 'tabela_orcamento.pdf'
+
+# Criando um documento PDF
 doc = SimpleDocTemplate(nome_arquivo_pdf, pagesize=letter)
 story = []
 
+# Criando a tabela de cabeçalho
 tabela_cabecalho = Table([
     [Image(caminho_logotipo, width=70, height=55, hAlign='LEFT'),
      f'Vendedor: Jones Carlos Manoel\nCNPJ Empresa: 11121112/0001-29\nEndereço Empresa: Sorocaba',
      f'Cliente: Itaburi Agro\nCNPJ: 11111111/0001-11\nEndereço: Presidente Prudente']
 ])
 
+# Aplicando estilo à tabela de cabeçalho
 style_cabecalho = TableStyle([
     ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
     ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
 ])
 
+# Adicionando a tabela de cabeçalho à história
 tabela_cabecalho.setStyle(style_cabecalho)
 story.append(tabela_cabecalho)
 story.append(Spacer(1, 12))
+
+# Convertendo dados do DataFrame para uma lista e criando a tabela de preços
 data_precos = [df.columns.tolist()] + df.values.tolist()
 table_precos = Table(data_precos)
 
+# Aplicando estilo à tabela de preços
 style_precos = TableStyle([
     ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
     ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
@@ -493,16 +515,20 @@ style_precos = TableStyle([
     ('GRID', (0, 0), (-1, -1), 1, colors.black),
 ])
 
+# Adicionando a tabela de preços à história
 table_precos.setStyle(style_precos)
 story.append(table_precos)
+
+# Construindo o documento PDF
 doc.build(story)
 
+# Imprimindo mensagem de sucesso
 print(f'Tabela exportada para {nome_arquivo_pdf} com sucesso!')
+
 ```
 
-Até o momento, o código está funcional, mas sua aplicação é restrita ao meu ambiente de compilação, carecendo de uma interface mais abrangente para ser utilizada como uma ferramenta por um vendedor.
 
-Abaixo, irei resumir as ações em funções e incluir e criar uma aplicação pela biblioteca Tkinter
+Abaixo, irei resumir as ações em funções, em seguida, criarei uma aplicação pela biblioteca Tkinter.
 
   ---
 
@@ -572,21 +598,21 @@ def transformar_dataframe(df_original):
     df['Un. Medida'] = df['Quantidade Total'].astype(str) + ' ' + df['Un.']
     df = df.drop(['Quantidade Total', 'Medida', 'Un.'], axis=1)
 
-    # A margem de lucro de Herbicidas é de 22%
-    # A margem de lucro de Fungicidas é de 14%
-    # A margem de lcuro de Inseticidas é de 31%
-    # Demais margens são 10%
-    
+    # A margem de lucro de Herbicidas é de 8%
+    # A margem de lucro de Fungicidas é de 11%
+    # A margem de lcuro de Inseticidas é de 13%
+    # Demais margens são 7%
+
     def determinar_margem_lucro(produto):
         if 'Herbicidas' in produto:
-            return 0.22
+          return 0.08
         elif 'Fungicidas' in produto:
-            return 0.14
+          return 0.11
         elif 'Inseticidas' in produto:
-            return 0.31
+          return 0.13
         else:
-            return 0.10  
-    
+          return 0.07  
+
     df['Margem Lucro'] = df['Produtos'].apply(determinar_margem_lucro)
     
     df['Valor Unitário Ajustado'] = df['Valor Unitário'] * (1 + df['Margem Lucro'])
@@ -606,16 +632,12 @@ def transformar_dataframe(df_original):
     
     df[['Un. Medida_Numero', 'Un. Medida_Medida']] = df['Un. Medida'].str.extract(r'(\d+\.?\d*)\s?(\D+)')
     
-    # Converta 'Un. Medida_Numero' para float
     df['Un. Medida_Numero'] = df['Un. Medida_Numero'].astype(float)
     
-    # Aplicando as condições
     condicao = (df['Un. Medida_Numero'] > 999) & ((df['Un. Medida_Medida'] == 'g') | (df['Un. Medida_Medida'] == 'ml'))
     
-    # Aplicando as conversões corrigidas
     df.loc[condicao, 'Un. Medida'] = df.loc[condicao].apply(lambda row: f'{row["Un. Medida_Numero"]/1000} kg' if row["Un. Medida_Medida"] == 'g' else f'{row["Un. Medida_Numero"]/1000} litro(s)', axis=1)
     
-    # Dropando colunas auxiliares
     df.drop(['Un. Medida_Numero', 'Un. Medida_Medida'], axis=1, inplace=True)
     
     original_ordem_colunas = df.columns.tolist()
@@ -643,7 +665,6 @@ def inicializar_tabela_cabecalho(vendedor_escolhido, cliente_escolhido):
 # Parte 2: Criação do PDF com base no DataFrame
 def processar_e_gerar_pdf(df, vendedor_escolhido, cliente_escolhido):
     try:
-        # Inicializar a tabela de cabeçalho antes de utilizá-la
         inicializar_tabela_cabecalho(vendedor_escolhido, cliente_escolhido)
 
         caminho_salvar = filedialog.asksaveasfilename(
@@ -708,6 +729,13 @@ def gerar_pdf(df, caminho_pdf, vendedor_escolhido, cliente_escolhido):
   ---
 
 # Tkinter 
+Até o momento, o código está funcional, mas sua aplicação é restrita ao meu ambiente de compilação, para o vendedor não precisar ter aceso direto ao código, criarei uma interface gráfica simples usando a biblioteca Tkinter.
+
+É uma janela que oferece ao vendedor a capacidade de se escolher como ponto focal e seu respectivo cliente em menus suspensos.
+
+Após o usuário clicar no botão "Processando", a interface gráfica permitirá a escolha de um arquivo Excel (.xlsx) referente ao fornecedor. Uma vez selecionado o arquivo, o código será executado para processar as informações contidas nele. 
+
+Após o processamento, a janela apresentará uma opção para selecionar o local onde o usuário deseja salvar o resultado do processamento.
 
 ```bash
 
@@ -776,16 +804,19 @@ janela.mainloop()
 
 # Vídeo conclusão
 
+O vídeo abaixo demonstra o funcionamento da solução, onde a transformação da planilha para o pdf de orçamento final é feito em poucos cliques.
+
 # VIDEO
 
 [![Assista ao vídeo](https://img.youtube.com/vi/rLJLyROZpHE/0.jpg)](https://www.youtube.com/embed/rLJLyROZpHE)
+
 
 ## Próximos passos:
 
 * Em um cenário real, uma equipe comercial frequentemente não se restringe a criar cotações de apenas um fornecedor; eles alternam entre fornecedores ou, em alguns casos, consolidam um orçamento único proveniente de diversas fontes de fornecedor. Considerando a evolução deste projeto, planejo a inclusão da capacidade de transformar a planilha a partir de múltiplas fontes de fornecimento para gerar um orçamento final, seja ele uma combinação de vários fornecedores ou não.
   
-* Criar uma calculadora de impostos (ex: pis/cofins) sobre os valores dos itens.
+* Criar uma calculadora de impostos (exemplo: PIS/COFINS) sobre os valores dos itens.
 
-* Criar uma calculadora de frete com base na cidade de coleta e entrega, com critérios de precificação baseados em peso e km.
+* Criar uma calculadora de frete com base na cidade de coleta e entrega, com critérios de precificação baseados em peso total e km de distância.
 
-* Criar a possibilidade do usuário enviar o e-mail para o cliente diretamente pelo executável
+* Criar a possibilidade do usuário enviar o e-mail para o cliente diretamente pelo executável.
