@@ -1,4 +1,4 @@
-### Sistema de geração de cotação automatizado.
+# Sistema de geração de cotação automatizado.
 .
 .
 
@@ -711,14 +711,19 @@ def gerar_pdf(df, caminho_pdf, vendedor_escolhido, cliente_escolhido):
 
 ```bash
 
-# Interface Gráfica (Tkinter)
+# Criando a janela principal da interface gráfica
 janela = tk.Tk()
+
+# Definindo o título da janela
 janela.title("Processador de Planilha")
 
+# Criando um frame para conter os widgets (botões e menus)
 frame_botoes = tk.Frame(janela)
 
+# Definindo uma lista de vendedores disponíveis
 vendedores = [" ", "Jones Karlos Manoel", "Adriana Motta", "Viviane Fitipaldi"]
 
+# Definindo uma lista de clientes disponíveis, com informações de nome, CNPJ e endereço
 clientes = [
     {"nome": " ", "cnpj": " ", "endereco": " "},
     {"nome": "Ytaburi Agro", "cnpj": "11111111/0001-11", "endereco": "Presidente Prudente"},
@@ -726,35 +731,44 @@ clientes = [
     {"nome": "Boiadero do Dudu", "cnpj": "11111111/0001-13", "endereco": "Betim"}
 ]
 
+# Criando uma variável para armazenar o vendedor selecionado e definindo seu valor inicial
 vendedor_var = StringVar(janela)
 vendedor_var.set(vendedores[0])
 
+# Criando uma variável para armazenar o cliente selecionado e definindo seu valor inicial
 cliente_var = StringVar(janela)
 cliente_var.set(clientes[0]["nome"])
 
-# Adicione rótulos acima dos Comboboxes
+# Criando um rótulo para o menu de seleção de vendedor
 rotulo_vendedor = tk.Label(frame_botoes, text="Vendedor(a):")
+
+# Criando um rótulo para o menu de seleção de cliente
 rotulo_cliente = tk.Label(frame_botoes, text="Cliente:")
 
+# Criando um menu suspenso (Combobox) para seleção do vendedor
 menu_vendedor = ttk.Combobox(frame_botoes, textvariable=vendedor_var, values=vendedores, state="readonly", width=20)
+
+# Criando um menu suspenso (Combobox) para seleção do cliente
 menu_cliente = ttk.Combobox(frame_botoes, textvariable=cliente_var, values=[cliente["nome"] for cliente in clientes], state="readonly", width=20)
 
-botao_processar = tk.Button(frame_botoes, text="Processar", command=processar_planilha)
+# Criando um botão para processar a planilha
+botao_processar = tk.Button(frame_botoes, text="Processando", command=processar_planilha)
 
+# Empacotando o frame de botões na janela, com margens de 5 pixels
 frame_botoes.pack(padx=5, pady=5)
 
-# Rótulo e Menu para o Vendedor
-rotulo_vendedor = tk.Label(frame_botoes, text="Selecione o(a) vendedor(a):")
+# Empacotando o rótulo e o menu de seleção de vendedor, lado a lado
 rotulo_vendedor.pack(side=tk.LEFT, padx=5)
 menu_vendedor.pack(side=tk.LEFT, padx=5)
 
-# Rótulo e Menu para o Cliente
-rotulo_cliente = tk.Label(frame_botoes, text="Selecione o cliente:")
+# Empacotando o rótulo e o menu de seleção de cliente, lado a lado
 rotulo_cliente.pack(side=tk.LEFT, padx=5)
 menu_cliente.pack(side=tk.LEFT, padx=5)
 
+# Empacotando o botão de processamento à esquerda dos menus
 botao_processar.pack(side=tk.LEFT, padx=5)
 
+# Iniciando o loop principal da interface gráfica
 janela.mainloop()
 ```
 
