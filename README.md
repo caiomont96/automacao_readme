@@ -763,6 +763,8 @@ janela.mainloop()
 
 # VIDEO
 
+[![Assista ao vídeo](https://img.youtube.com/vi/rLJLyROZpHE/0.jpg)](https://www.youtube.com/embed/rLJLyROZpHE)
+
 ## Próximos passos:
 
 * Em um cenário real, uma equipe comercial frequentemente não se restringe a criar cotações de apenas um fornecedor; eles alternam entre fornecedores ou, em alguns casos, consolidam um orçamento único proveniente de diversas fontes de fornecedor. Considerando a evolução deste projeto, planejo a inclusão da capacidade de transformar a planilha a partir de múltiplas fontes de fornecimento para gerar um orçamento final, seja ele uma combinação de vários fornecedores ou não.
