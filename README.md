@@ -22,8 +22,6 @@ O vídeo abaixo mostra como o oçamento era feito manualmente antes da solução
 
 ## VIDEO
 
-[![Assista ao vídeo](https://img.youtube.com/vi/rLJLyROZpHE/0.jpg)](https://www.youtube.com/embed/rLJLyROZpHE)
-
 # Dividindo a solução em passos:
 
 * O fornecedor costuma enviar a planilha em um formato horizontal, onde as características estão na horizontal e os produtos na vertical, essa planilha deve ser transposta.
@@ -187,14 +185,17 @@ O código abaixo vai separar
 
 ```bash
 
-# Extraindo informações de medidas numéricas e unidades da coluna 'Un. Medida' e as atribui a novas colunas 'Medida' e 'Un.'.
-# A expressão regular (\d+\.?\d*)\s*([a-zA-Z\(s\)]*) captura um ou mais dígitos (com ou sem ponto decimal) como 'Medida' e letras (com parênteses) como 'Un.'.
+# Extraindo informações da coluna [Un. Medida] e as atribui a novas colunas 'Medida' e 'Un.'.
+# Separando número e palavra com o str.extract('(\d+\.?\d*)\s*([a-zA-Z\(s\)]*)'), uma expressão regular projetada para extrair números decimais seguidos de unidades de medida de uma string.
+
 df[['Medida', 'Un.']] = df['Un. Medida'].str.extract('(\d+\.?\d*)\s*([a-zA-Z\(s\)]*)')
 
 # Removendo a coluna original 'Un. Medida' do DataFrame df.
+
 df = df.drop('Un. Medida', axis=1)
 
-# convertendo a coluna 'Medida' para valores numéricos, 1ualquer valor que não possa ser convertido é definido como NaN (Not a Number) devido ao parâmetro errors='coerce'.
+# convertendo a coluna 'Medida' para valores numéricos, qualquer valor que não possa ser convertido é definido como NaN (Not a Number) devido ao parâmetro errors='coerce'.
+
 df['Medida'] = pd.to_numeric(df['Medida'], errors='coerce')
 
 ```
@@ -212,7 +213,7 @@ A partir daqui, a planilha Vai ter 'Medida' e 'Un.' separados, um como número i
 | Fungicidas Tebuconazole     | 5          | 95.98          | 500    | g       |
 | Inseticidas Imidacloprid    | 32         | 46.63          | 250    | ml      |
 
-Agora, vamos criar uma coluna chamada Valor Total, que contém a Quantidade multiplicada pelo Valor Unitário e uma chamada Quantidade Total eu multiplica Quantidade e Medida
+Agora, vamos criar uma coluna chamada [Valor Total], que contém a Quantidade multiplicada pelo [Valor Unitário] e uma chamada [Quantidade Total] eu multiplica [Quantidade] e [Medida]
 
 ```bash
 
@@ -367,22 +368,22 @@ df['Valor Total'] = df['Valor Total'].astype(float).round(2)
 
 ```bash
 
-# extrai informações numéricas e alfabéticas da coluna 'Un. Medida' e atribui a esses valores as novas colunas 'Un. Medida_Numero' e 'Un. Medida_Medida'.
+# Extraindo informações numéricas e alfabéticas da coluna 'Un. Medida' e atribuindo a esses valores as novas colunas 'Un. Medida_Numero' e 'Un. Medida_Medida'.
 
 df[['Un. Medida_Numero', 'Un. Medida_Medida']] = df['Un. Medida'].str.extract(r'(\d+\.?\d*)\s?(\D+)')
 
 #converte a coluna 'Un. Medida_Numero' para o tipo de dado float.
 df['Un. Medida_Numero'] = df['Un. Medida_Numero'].astype(float)
 
-# cria uma condição para identificar linhas que atendem a determinados critérios (número maior que 999 e medida em gramas ou mililitros).
+# Criando uma condição para identificar linhas que atendem a determinados critérios (número maior que 999 e medida em gramas ou mililitros).
 
 condicao = (df['Un. Medida_Numero'] > 999) & ((df['Un. Medida_Medida'] == 'g') | (df['Un. Medida_Medida'] == 'ml'))
 
-# aplica uma função lambda às linhas que atendem à condição. Essa função converte as medidas de gramas para quilogramas ou mililitros para litros, conforme apropriado.
+# Aplicando uma função lambda às linhas que atendem à condição. Essa função converte as medidas de gramas para quilogramas ou mililitros para litros, conforme apropriado.
 
 df.loc[condicao, 'Un. Medida'] = df.loc[condicao].apply(lambda row: f'{row["Un. Medida_Numero"]/1000} kg' if row["Un. Medida_Medida"] == 'g' else f'{row["Un. Medida_Numero"]/1000} litro(s)', axis=1)
 
-# remove as colunas auxiliares 'Un. Medida_Numero' e 'Un. Medida_Medida'.
+# Removendo as colunas auxiliares 'Un. Medida_Numero' e 'Un. Medida_Medida'.
 
 df.drop(['Un. Medida_Numero', 'Un. Medida_Medida'], axis=1, inplace=True)
 
