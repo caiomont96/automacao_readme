@@ -63,7 +63,6 @@ No primeiro passo, configuramos as bibliotecas necessárias para o processo:
 
 * Tkinter: Utilizado para criar uma interface gráfica intuitiva, permitindo ao usuário inserir a planilha e exportar para PDF em uma janela interativa.
 
-Este conjunto de bibliotecas é fundamental para garantir a fundamental para garantir a funcionalidade e usabilidade da solução, abrangendo desde a manipulação dos dados até a interação intuitiva com o usuário.
 
 ```bash
 
