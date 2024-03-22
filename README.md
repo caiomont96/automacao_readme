@@ -61,26 +61,46 @@ No primeiro passo, configuramos as bibliotecas necessárias para o processo:
 
 * Tkinter: Utilizado para criar uma interface gráfica intuitiva, permitindo ao usuário inserir a planilha e exportar para PDF em uma janela interativa.
 
-Este conjunto de bibliotecas é fundamental para garantir a fu
+Este conjunto de bibliotecas é fundamental para garantir a fundamental para garantir a funcionalidade e usabilidade da solução, abrangendo desde a manipulação dos dados até a interação intuitiva com o usuário.
 
 ```bash
 
+# criar documentos PDF
 !pip install reportlab
+
+# manipulação de arquivos Excel (.xlsx)
 !pip install openpyxl
+
+# manipulação de dados tabulares
 import pandas as pd
+
+# criação de gráficos e visualizações
 import matplotlib.pyplot as plt
+
+# salvar gráficos em um arquivo PDF
 from matplotlib.backends.backend_pdf import PdfPages
+
+# definição do tamanho do documento PDF
 from reportlab.lib.pagesizes import letter
+
+# trabalhar com cores em documentos PDF
 from reportlab.lib import colors
+
+# aplicação de estilos em elementos do documento PDF
 from reportlab.lib.styles import getSampleStyleSheet
+
+# criação de documentos PDF
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Image
+
+# adicionar espaçadores em documentos PDF
 from reportlab.platypus import Spacer
+
 ```
 
-Inserção da planilha
+Inserção da planilha.
 
 ```bash
-
+# Lendo o arquivo e armazenando os dados em um DataFrame do Pandas
 df = pd.read_excel('fornecedor_agro.xlsx')
 
 ```
@@ -161,7 +181,7 @@ df
 | Adjuvantes Surfactantes          | Frasco de 500ml                  | 32         | 42.66          |
 | Adjuvantes Espalhantes adesivos   | Frasco de 500ml                  | 19         | 55.33          |
 
-Agora temos mais clareza sobre como está a planilha ao verticalizá-la e podemos seguir com o passo a passo.
+A partir daqui, temos mais clareza sobre como está a planilha ao verticalizá-la e podemos seguir com o passo a passo.
 
   ---
 
@@ -178,7 +198,7 @@ Estes 10500g por sua vez serão convertidos em 10,5 kg
 Primeiramente, vamos tirar as frases "Embalagem de", "Saco de", "Frasco de" e posteriormente separar o numero e sua unidade de medida (ex: 500 e g)
 para podermos tratar essa coluna de forma numérica e não como string.
 
-_A partir daqui, por questões práticas e estéticas, não mostrarei todas as linhas da tabela mas apenas as primeiras ou mais importantes para a interpretação do que está acontecendo_
+_Por questões práticas e estéticas, a partir daqui não mostrarei todas as linhas da tabela mas apenas as primeiras ou mais importantes para a interpretação do que está acontecendo_
 
 ```bash
 
@@ -194,12 +214,11 @@ df['Un. Medida'] = df['Un. Medida'].str.replace('Embalagem de|Saco de|Frasco de'
 | Fungicidas Tebuconazole                       | 500g                               | 5          | 95.98          |
 | Inseticidas Imidacloprid                      | 250ml                              | 32         | 46.63          |
 
-O código abaixo vai separar
+O código abaixo separa o a medida de quantidade (ex: 250) de unidade de medida (ex: ml)
 
 ```bash
 
-# Extraindo informações da coluna [Un. Medida] e as atribui a novas colunas 'Medida' e 'Un.'.
-# Separando número e palavra com o str.extract('(\d+\.?\d*)\s*([a-zA-Z\(s\)]*)'), uma expressão regular projetada para extrair números decimais seguidos de unidades de medida de uma string.
+# Extraindo informações da coluna [Un. Medida] e as atribui a novas colunas 'Medida' e 'Un.' e separando número e palavra com o str.extract('(\d+\.?\d*)\s*([a-zA-Z\(s\)]*)'), uma expressão regular projetada para extrair números decimais seguidos de unidades de medida de uma string.
 
 df[['Medida', 'Un.']] = df['Un. Medida'].str.extract('(\d+\.?\d*)\s*([a-zA-Z\(s\)]*)')
 
@@ -213,7 +232,7 @@ df['Medida'] = pd.to_numeric(df['Medida'], errors='coerce')
 
 ```
 
-A partir daqui, a planilha Vai ter 'Medida' e 'Un.' separados, um como número int e outro como string.
+A partir daqui, a planilha Vai ter 'Medida' e 'Un.' separados, um como número _int_ e outro como _string_.
 
 
 | Produtos                   | Quantidade | Valor Unitário | Medida | Un.     |
@@ -226,7 +245,7 @@ A partir daqui, a planilha Vai ter 'Medida' e 'Un.' separados, um como número i
 | Fungicidas Tebuconazole     | 5          | 95.98          | 500    | g       |
 | Inseticidas Imidacloprid    | 32         | 46.63          | 250    | ml      |
 
-Agora, vamos criar uma coluna chamada [Valor Total], que contém a Quantidade multiplicada pelo [Valor Unitário] e uma chamada [Quantidade Total] eu multiplica [Quantidade] e [Medida]
+Vamos criar uma coluna chamada [Valor Total], que contém a Quantidade multiplicada pelo [Valor Unitário] e uma chamada [Quantidade Total] eu multiplica [Quantidade] e [Medida]
 
 ```bash
 
@@ -250,7 +269,7 @@ df['Quantidade Total'] = df['Quantidade'] * df['Medida']
 | Inseticidas Imidacloprid    | 32         | 46.63          | 250    | ml      | 1492.16     | 8000              |
 
 
-Agora, vamos re-criar a coluna 'Un. Medida' concatenando a coluna Quantidade Total e de Un.
+Vamos re-criar a coluna 'Un. Medida' concatenando a coluna Quantidade Total e de Un.
 
 Vamos aproveitar e excluir as colunas Quantidade Total, Medida e Un., suas funções eram auxiliares e não farão parte o produto final.
 
@@ -314,7 +333,7 @@ df['Margem Lucro'] = df['Produtos'].apply(determinar_margem_lucro)
 | Fungicidas Tebuconazole    | 5          | 95.98          | 500     | g    | 479.9       | 2500              | 0.11         |
 | Inseticidas Imidacloprid   | 32         | 46.63          | 250     | ml   | 1492.16     | 8000              | 0.13         |
 
-Agora aplicando:
+Aplicando a margem aos valores.
 
 ```bash
 
@@ -337,7 +356,7 @@ df['Valor Total Ajustado'] = df['Quantidade'] * df['Valor Unitário Ajustado']
 | Inseticidas Imidacloprid   | 32         | 46.63          | 250    | ml  | 1492.16     | 8000              | 0.13         | 52.6919                 | 1686.1408             |
 
 
-Ajustando colunas:
+Ajustando colunas.
 
 ```bash
 
@@ -363,7 +382,7 @@ df = df[nova_ordem_colunas]
 | Fungicidas Tebuconazole    | 5          | 106.5378       | 532.689     | 2500 g        |
 | Inseticidas Imidacloprid   | 32         | 52.6919        | 1686.1408   | 8000 ml       |
 
-Agora precisaremos resumir os centavos duas casas após a vírgula:
+Agora, precisaremos resumir os centavos duas casas após a vírgula.
 
 ```bash
 # Convertendo as colunas 'Valor Unitário' e 'Valor Total' para o tipo de dado float e arredondam os valores para duas casas decimais.
@@ -472,7 +491,7 @@ Abaixo, a tabela está pronta e dentro do formato que o cliente exige receber, c
 
 # Momento Criação do pdf.
 
-Agora é o momento de transformar o Data Frame em um orçamento formal, de forma que a logo fique no canto superior esquerdo e dados de vendedor e cliente em cima da tabela, usaremos a biblioteca ReportLab. 
+É o momento de transformar o Data Frame em um orçamento formal, de forma que a logo fique no canto superior esquerdo e dados de vendedor e cliente em cima da tabela, usaremos a biblioteca ReportLab. 
 
 Esta biblioteca será responsável pela geração e personalização de documentos PDF. 
 
