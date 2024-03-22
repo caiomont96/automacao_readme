@@ -22,7 +22,7 @@ O vídeo abaixo mostra como o oçamento é feito manualmente antes da solução 
 
 ## VIDEO
 
-[![Assista ao vídeo](https://img.youtube.com/vi/HnrVCK9Mu-M/0.jpg)](https://www.youtube.com/watch?v=HnrVCK9Mu-M)
+[![Assista ao vídeo](https://img.youtube.com/vi/HnrVCK9Mu-M/0.jpg)](https://www.youtube.com/embed/HnrVCK9Mu-M)
 
  ---
 
