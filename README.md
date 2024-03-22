@@ -18,12 +18,6 @@ Diante desse cenário, a equipe de dados recebeu o desafio de desenvolver uma so
 
 O objetivo é transformar a planilha do fornecedor em um documento final em PDF, incorporando dados do cliente, conversões de unidade de medida e margens de lucro, de maneira rápida e eficiente, permitindo que os vendedores foquem no que fazem de melhor: negociar e atender aos clientes.
 
-O vídeo abaixo mostra como o oçamento é feito manualmente antes da solução ser implementada:
-
-## VIDEO
-
-[![Assista ao vídeo](https://img.youtube.com/vi/HnrVCK9Mu-M/0.jpg)](https://www.youtube.com/embed/HnrVCK9Mu-M)
-
  ---
 
 ## Estratégia de Solução em Etapas
@@ -49,6 +43,10 @@ O vídeo abaixo mostra como o oçamento é feito manualmente antes da solução 
 * Após processar a tabela e criar o pdf, criar um executável (uma janela de interação) para a automação ser executada pelo vendedores.
 
 * Este executável será possível convertendo o código de _.ipkernel_ para _.py_ e gerado no repositório PyPI.
+
+Caso  queira entender este processo manual de forma mais sólida, o vídeo abaixo mostra como o oçamento é feito manualmente antes da solução ser implementada.
+
+[![Assista ao vídeo](https://img.youtube.com/vi/HnrVCK9Mu-M/0.jpg)](https://www.youtube.com/embed/HnrVCK9Mu-M)
 
   ---
 
