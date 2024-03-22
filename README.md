@@ -96,6 +96,10 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Image
 # adicionar espaçadores em documentos PDF
 from reportlab.platypus import Spacer
 
+# importando a classe StringVar do módulo tkinter para manipulação de variáveis de string em interfaces gráficas
+from tkinter import StringVar
+
+
 ```
 
 Inserção da planilha.
