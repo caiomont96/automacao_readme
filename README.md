@@ -44,7 +44,7 @@ O objetivo é transformar a planilha do fornecedor em um documento final em PDF,
 
 * Este executável será possível convertendo o código de _.ipkernel_ para _.py_ e gerado no repositório PyPI.
 
-Caso  queira entender como é  feito este processo manual de forma mais sólida, o vídeo abaixo mostra como o oçamento é feito manualmente antes da solução ser implementada.
+Caso  queira entender como é  feito este processo manual de forma mais sólida, o vídeo abaixo mostra como o oçamento é feito antes da solução ser implementada.
 
 [![Assista ao vídeo](https://img.youtube.com/vi/HnrVCK9Mu-M/0.jpg)](https://www.youtube.com/embed/HnrVCK9Mu-M)
 
