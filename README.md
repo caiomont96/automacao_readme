@@ -18,13 +18,21 @@ Diante desse cenário, a equipe de dados recebeu o desafio de desenvolver uma so
 
 O objetivo é transformar a planilha do fornecedor em um documento final em PDF, incorporando dados do cliente, conversões de unidade de medida e margens de lucro, de maneira rápida e eficiente, permitindo que os vendedores foquem no que fazem de melhor: negociar e atender aos clientes.
 
-O vídeo abaixo mostra como o oçamento era feito manualmente antes da solução:
+O vídeo abaixo mostra como o oçamento é feito manualmente antes da solução ser implementada:
 
 ## VIDEO
 
-# Dividindo a solução em passos:
+[![Assista ao vídeo](https://img.youtube.com/vi/rLJLyROZpHE/0.jpg)](https://www.youtube.com/embed/rLJLyROZpHE)
+
+ ---
+
+## Estratégia de Solução em Etapas
+
+* A solução será desenvolvida no Jupyter, uma aplicação de código aberto que permite analisar e transformar dados.
 
 * O fornecedor costuma enviar a planilha em um formato horizontal, onde as características estão na horizontal e os produtos na vertical, essa planilha deve ser transposta.
+
+* Ao ser transposta, temos 4 colunas: [Produto], [Un. Medida], [Quantidade] e [Valor Unitário]
   
 * A coluna [Un. Medida] precisa ser alterada com a sua medida multiplicada por sua quantidade. O resultado disso por sua vez precisa ser convertido (ex: 2000g = 2kg)
 
@@ -32,24 +40,30 @@ O vídeo abaixo mostra como o oçamento era feito manualmente antes da solução
 
 * Será necessário incluir a margem de lucro nas colunas [Valor Unitário] e consequentemente [Valor Total]
 
-* Precisará ser criada na última linha o ‘Total’ do valor final que o cliente irá pagar.
+* Precisará ser criada na última linha o ‘Total’ do valor final que o cliente irá pagar, somando a coluna [Valor Total].
+
+* Após estas trasnformações, as colunas precisarão ser  [Produtos], [Quantidade], [Valor Unitário], [Valor Total], [Un. Medida] nesta ordem. 
 
 * O PDF final precisa ter a logo da empresa no canto superior esquerdo e os dados da empresa e do cliente em cima da tabela.
 
-* Após processar a tabela e criar o pdf, criar um executável (uma janela de interação) para ser usado pelo vendedores.
+* Após processar a tabela e criar o pdf, criar um executável (uma janela de interação) para a automação ser executada pelo vendedores.
+
+* Este executável será possível convertendo o código de _.ipkernel_ para _.py_ e gerado no repositório PyPI.
 
   ---
 
 
-# Primeiro passo
+## Primeiro passo
 
-O primeiro passo é inserir as bibliotecas:
+No primeiro passo, configuramos as bibliotecas necessárias para o processo:
 
-* Pandas para manipulação da planilha xlsx
-  
-* Reportlab para conversão em pdf
+* Pandas: Utilizado para a manipulação de planilhas Excel (xlsx).
 
-* Tkinter para criar uma interface gráfica para o usuário inserir a planilha e exportar em pdf em uma janela
+* Reportlab: Essencial para a conversão dos dados em formato PDF.
+
+* Tkinter: Utilizado para criar uma interface gráfica intuitiva, permitindo ao usuário inserir a planilha e exportar para PDF em uma janela interativa.
+
+Este conjunto de bibliotecas é fundamental para garantir a fu
 
 ```bash
 
@@ -72,9 +86,10 @@ Inserção da planilha
 df = pd.read_excel('fornecedor_agro.xlsx')
 
 ```
-# formato inicial da planilha
+## formato inicial da planilha
 
-A planilha chega assim:
+A leitura da planilha é conduzida desta maneira:
+
 
 |      | Produtos                               | Herbicidas Glyphosate | Herbicidas Paraquat | Herbicidas Atrazine | ... |
 |------|-------------------------------------- | ---------------------- | ------------------- | ------------------- | --- |
@@ -85,7 +100,7 @@ A planilha chega assim:
 
 
 
-precisaremos transpor.
+Precisaremos transpor de forma que as celulas da primeira linha se tornem os cabeçalhos.
 
 ```bash
 # A linha de código "df = df.T" transpõe (inverte linhas e colunas) o DataFrame.
@@ -94,7 +109,7 @@ precisaremos transpor.
 df = df.T
 ```
 
-Ao transpor, a planilha fica dessa forma
+Ao transpor, a planilha fica dessa forma:
 
 |                            | 0                         | 1          | 2              |
 |----------------------------|---------------------------|------------|----------------|
@@ -165,7 +180,7 @@ Estes 10500g por sua vez serão convertidos em 10,5 kg
 Primeiramente, vamos tirar as frases "Embalagem de", "Saco de", "Frasco de" e posteriormente separar o numero e sua unidade de medida (ex: 500 e g)
 para podermos tratar essa coluna de forma numérica e não como string.
 
-(A partir daqui, por questões práticas e estéticas, não mostrarei todas as linhas da tabela mas apenas as primeiras ou mais importantes para a interpretação do que está acontecendo)
+_A partir daqui, por questões práticas e estéticas, não mostrarei todas as linhas da tabela mas apenas as primeiras ou mais importantes para a interpretação do que está acontecendo_
 
 ```bash
 
@@ -200,7 +215,7 @@ df['Medida'] = pd.to_numeric(df['Medida'], errors='coerce')
 
 ```
 
-A partir daqui, a planilha Vai ter 'Medida' e 'Un.' separados, um como número int. e outro como string.
+A partir daqui, a planilha Vai ter 'Medida' e 'Un.' separados, um como número int e outro como string.
 
 
 | Produtos                   | Quantidade | Valor Unitário | Medida | Un.     |
@@ -217,8 +232,12 @@ Agora, vamos criar uma coluna chamada [Valor Total], que contém a Quantidade mu
 
 ```bash
 
+# Calculando o valor total multiplicando a quantidade pelo valor unitário
 df['Valor Total'] = df['Quantidade'] * df['Valor Unitário']
+
+# Calculando a quantidade total multiplicando a quantidade pela medida
 df['Quantidade Total'] = df['Quantidade'] * df['Medida']
+
 
 ```
 
@@ -257,6 +276,7 @@ df = df.drop(['Quantidade Total', 'Medida', 'Un.'], axis=1)
 | Fungicidas Tebuconazole    | 5          | 95.98          | 479.9       | 2500 g        |
 | Inseticidas Imidacloprid   | 32         | 46.63          | 1492.16     | 8000 ml       |
 
+Inserindo as margens de lucro.
 
 ```bash
 
@@ -305,7 +325,6 @@ df['Valor Unitário Ajustado'] = df['Valor Unitário'] * (1 + df['Margem Lucro']
 
 # Calculando o valor total ajustado para cada linha multiplicando a quantidade pela coluna 'Valor Unitário Ajustado'.
 df['Valor Total Ajustado'] = df['Quantidade'] * df['Valor Unitário Ajustado']
-# Essas operações refletem o ajuste dos preços com base nas margens de lucro específicas de cada categoria de produto.
 
 ```
 
@@ -320,7 +339,7 @@ df['Valor Total Ajustado'] = df['Quantidade'] * df['Valor Unitário Ajustado']
 | Inseticidas Imidacloprid   | 32         | 46.63          | 250    | ml  | 1492.16     | 8000              | 0.13         | 52.6919                 | 1686.1408             |
 
 
-Arrumando as várias colunas
+Ajustando colunas:
 
 ```bash
 
@@ -346,15 +365,14 @@ df = df[nova_ordem_colunas]
 | Fungicidas Tebuconazole    | 5          | 106.5378       | 532.689     | 2500 g        |
 | Inseticidas Imidacloprid   | 32         | 52.6919        | 1686.1408   | 8000 ml       |
 
+Agora precisaremos resumir os centavos duas casas após a vírgula:
+
 ```bash
-
-# As linhas "df['Valor Unitário'] = df['Valor Unitário'].astype(float).round(2)" e "df['Valor Total'] = df['Valor Total'].astype(float).round(2)"
-# convertem as colunas 'Valor Unitário' e 'Valor Total' para o tipo de dado float e arredondam os valores para duas casas decimais.
-# Isso garante que essas colunas tenham valores numéricos formatados corretamente.
-
+# Convertendo as colunas 'Valor Unitário' e 'Valor Total' para o tipo de dado float e arredondam os valores para duas casas decimais.
 
 df['Valor Unitário'] = df['Valor Unitário'].astype(float).round(2)
 df['Valor Total'] = df['Valor Total'].astype(float).round(2)
+
 ```
 | Produtos                   | Quantidade | Valor Unitário | Valor Total | Un. Medida    |
 |----------------------------|------------|----------------|-------------|---------------|
@@ -365,6 +383,8 @@ df['Valor Total'] = df['Valor Total'].astype(float).round(2)
 | Fungicidas Azoxystrobin    | 13         | 51.05          | 663.64      | 6500 g        |
 | Fungicidas Tebuconazole    | 5          | 106.54         | 532.69      | 2500 g        |
 | Inseticidas Imidacloprid   | 32         | 52.69          | 1686.14     | 8000 ml       |
+
+Vamos garantir que unidades como 'gramas' e 'mililitros', que excedam 999, sejam  convertidas para 'Kg' e 'litro(s)', respectivamente.
 
 ```bash
 
@@ -399,18 +419,20 @@ df.drop(['Un. Medida_Numero', 'Un. Medida_Medida'], axis=1, inplace=True)
 | Fungicidas Tebuconazole                      | 5          | 106.54         | 532.69      | 2.5 kg             |
 | Inseticidas Imidacloprid                     | 32         | 52.69          | 1686.14     | 8.0 litro(s)       |
 
+Criando a linha com o Total da soma da coluna [Valor Total].
+
 ```bash
 
 # Exibindo o DataFrame atualizado
-# Salva a ordem original das colunas do DataFrame.
+# Salvando a ordem original das colunas do DataFrame.
+
 original_ordem_colunas = df.columns.tolist()
 
-# cria um novo DataFrame contendo uma linha total com a soma dos valores da coluna 'Valor Total'.
-
+# Criando um novo DataFrame contendo uma linha total com a soma dos valores da coluna 'Valor Total'.
 total_linha = pd.DataFrame({'Produtos': 'Total', 'Un.': '', 'Valor Unitário': '', 'Unidades': '',
                           'Valor Total': df['Valor Total'].sum()}, index=[len(df)])
 
-# preenche todas as colunas, exceto 'Produtos' e 'Valor Total', da linha total com valores vazios.
+# Preenche todas as colunas, exceto 'Produtos' e 'Valor Total', da linha total com valores vazios.
 total_linha.loc[:, df.columns.difference(['Produtos', 'Valor Total'])] = ''
 
 # concatena o DataFrame original com a linha total.
@@ -420,6 +442,8 @@ df = pd.concat([df, total_linha])
 df = df[original_ordem_colunas]
 ```
   ---
+
+## Tabela transformada.
 
 Abaixo, a tabela está pronta e dentro do formato que o cliente exige receber, com margens de lucro embutidas e suas respectivas unidades de Medida convertidas com base na Quantidade.
 
@@ -451,6 +475,7 @@ Abaixo, a tabela está pronta e dentro do formato que o cliente exige receber, c
 # Momento Criação do pdf.
 
 Agora é o momento de transformar o Data Frame em um orçamento formal, de forma que a logo fique no canto superior esquerdo e dados de vendedor e cliente em cima da tabela, usaremos a biblioteca ReportLab. 
+
 Esta biblioteca será responsável pela geração e personalização de documentos PDF. 
 
 ```bash
@@ -528,7 +553,7 @@ print(f'Tabela exportada para {nome_arquivo_pdf} com sucesso!')
 ```
 
 
-Abaixo, irei resumir as ações em funções, em seguida, criarei uma aplicação pela biblioteca Tkinter.
+Abaixo, irei resumir todas as ações acima em funções. Em seguida, criarei uma aplicação pela biblioteca Tkinter.
 
   ---
 
@@ -548,7 +573,6 @@ caminho_logotipo = 'agro_logo.png'
 df = None
 tabela_cabecalho = None  # Adicione esta linha para definir a tabela_cabecalho como uma variável global
 
-# Parte 1: Leitura do arquivo Excel e criação do DataFrame
 def processar_planilha():
     global df
     vendedor_escolhido = vendedor_var.get()
@@ -653,6 +677,7 @@ def transformar_dataframe(df_original):
     
     return df 
 
+# PDF ================================================================
 
 def inicializar_tabela_cabecalho(vendedor_escolhido, cliente_escolhido):
     global tabela_cabecalho
@@ -662,7 +687,6 @@ def inicializar_tabela_cabecalho(vendedor_escolhido, cliente_escolhido):
          f'Cliente: {cliente_escolhido}\nCNPJ: 11111111/0001-11\nEndereço: {get_endereco(cliente_escolhido)}']
     ])
 
-# Parte 2: Criação do PDF com base no DataFrame
 def processar_e_gerar_pdf(df, vendedor_escolhido, cliente_escolhido):
     try:
         inicializar_tabela_cabecalho(vendedor_escolhido, cliente_escolhido)
@@ -681,7 +705,7 @@ def processar_e_gerar_pdf(df, vendedor_escolhido, cliente_escolhido):
         messagebox.showerror("Erro", f"Erro ao gerar o PDF: {e}")
         messagebox.showerror("Erro", f"Erro ao gerar o PDF: {e}")
 
-#| ==========================================================================================
+#| =============================================================
 
 def get_endereco(cliente_nome):
     for cliente in clientes:
@@ -729,13 +753,14 @@ def gerar_pdf(df, caminho_pdf, vendedor_escolhido, cliente_escolhido):
   ---
 
 # Tkinter 
+
 Até o momento, o código está funcional, mas sua aplicação é restrita ao meu ambiente de compilação, para o vendedor não precisar ter aceso direto ao código, criarei uma interface gráfica simples usando a biblioteca Tkinter.
 
-É uma janela que oferece ao vendedor a capacidade de se escolher como ponto focal e seu respectivo cliente em menus suspensos.
+Quando abrir o executável, vai aparecer para o vendedor uma janela. Nela, ele pode se escolher como ponto focal (seu nome e dados) e os de um cliente de um menu.
 
-Após o usuário clicar no botão "Processando", a interface gráfica permitirá a escolha de um arquivo Excel (.xlsx) referente ao fornecedor. Uma vez selecionado o arquivo, o código será executado para processar as informações contidas nele. 
+Depois, ele irá clicar no botão "Processar". Isso vai permitir que o vendedor escolha um arquivo do Excel com as informações do fornecedor.
 
-Após o processamento, a janela apresentará uma opção para selecionar o local onde o usuário deseja salvar o resultado do processamento.
+Nesse meio tempo a conversão será feita, e uma vez terminado, outra janela vai aparecer para que o vendedor escolha onde quer salvar o resultado.
 
 ```bash
 
@@ -810,8 +835,9 @@ O vídeo abaixo demonstra o funcionamento da solução, onde a transformação d
 
 [![Assista ao vídeo](https://img.youtube.com/vi/rLJLyROZpHE/0.jpg)](https://www.youtube.com/embed/rLJLyROZpHE)
 
+---
 
-## Próximos passos:
+# Próximos passos:
 
 * Em um cenário real, uma equipe comercial frequentemente não se restringe a criar cotações de apenas um fornecedor; eles alternam entre fornecedores ou, em alguns casos, consolidam um orçamento único proveniente de diversas fontes de fornecedor. Considerando a evolução deste projeto, planejo a inclusão da capacidade de transformar a planilha a partir de múltiplas fontes de fornecimento para gerar um orçamento final, seja ele uma combinação de vários fornecedores ou não.
   
