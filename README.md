@@ -796,14 +796,27 @@ janela.title("Processador de Planilha")
 frame_botoes = tk.Frame(janela)
 
 # Definindo uma lista de vendedores disponíveis
-vendedores = [" ", "Jones Karlos Manoel", "Adriana Motta", "Viviane Fitipaldi"]
+
+vendedores = [" ", "Carlos Manoel Oliveira", "Adriana Motta", "Viviane Fitipaldi", "Rosana Martins", "Felipe Silva"]
 
 # Definindo uma lista de clientes disponíveis, com informações de nome, CNPJ e endereço
+
 clientes = [
+
     {"nome": " ", "cnpj": " ", "endereco": " "},
-    {"nome": "Ytaburi Agro", "cnpj": "11111111/0001-11", "endereco": "Presidente Prudente"},
-    {"nome": "Fazenda Moinho de vento", "cnpj": "11111111/0001-12", "endereco": "Itu"},
-    {"nome": "Boiadero do Dudu", "cnpj": "11111111/0001-13", "endereco": "Betim"}
+    {"nome": "CultivaBrasil Agroindústria", "cnpj": "11111111/0001-11", "endereco": "Presidente Prudente (SP)"},
+    {"nome": "Verde Sul Agropecuária", "cnpj": "11111111/0001-12", "endereco": "Itu (SP)"},
+    {"nome": "SemeiaBrasil LTDA.", "cnpj": "11111111/0001-14", "endereco": "Betim (MG)"},
+    {"nome": "EcoCampo Agro", "cnpj": "11111111/0001-15", "endereco": "Lavras (MG)"},
+    {"nome": "TerraFértil LTDA.", "cnpj": "11111111/0001-16", "endereco": "Concórdia (SC)"},
+    {"nome": "CéuAzul Fazendas", "cnpj": "11111111/0001-17", "endereco": "Betim (MG)"},
+    {"nome": "MonteSul Agropecuária", "cnpj": "11111111/0001-18", "Venâncio Aires (RS)": "Itumbiara (GO)"},
+    {"nome": "Vale Serrano Agroindústria", "cnpj": "11111111/0001-19", "endereco": "Jarinu (SP)"},
+    {"nome": "MonteVerde Inovações", "cnpj": "11111111/0001-20", "endereco": " Chapadão do Sul (MS)"},
+    {"nome": "EcoCampoTech - Ponta Porã", "cnpj": "11111111/0001-21", "endereco": "Castro (PR)"},
+    {"nome": "ValeDourado LTDA.", "cnpj": "11111111/0001-22", "endereco": "Campo Grande (MS)"},
+    {"nome": "FazendaSerena Negócios.", "cnpj": "11111111/0001-23", "endereco": "Rio Verde (GO)"}
+
 ]
 
 # Criando uma variável para armazenar o vendedor selecionado e definindo seu valor inicial
